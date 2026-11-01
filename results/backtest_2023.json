@@ -1,0 +1,101 @@
+{
+  "year": 2023,
+  "bases": 30,
+  "radius_km": 45.0,
+  "n_fires": 2296,
+  "forecast_total": 1449.0219558069066,
+  "history_total": 1666.2608642578125,
+  "actual_total": 2296,
+  "by_fire_centre": {
+    "Cariboo": {
+      "pred": 181,
+      "act": 259
+    },
+    "Coastal": {
+      "pred": 196,
+      "act": 371
+    },
+    "Kamloops": {
+      "pred": 384,
+      "act": 411
+    },
+    "Northwest": {
+      "pred": 64,
+      "act": 281
+    },
+    "Prince George": {
+      "pred": 229,
+      "act": 675
+    },
+    "Southeast": {
+      "pred": 329,
+      "act": 299
+    },
+    "unassigned": {
+      "pred": 66,
+      "act": 0
+    }
+  },
+  "top10_capture": {
+    "model": 0.385185182094574,
+    "history": 0.3930283188819885
+  },
+  "coverage": {
+    "model": 0.43031358885017423,
+    "history": 0.429006968641115,
+    "even": 0.29965156794425085,
+    "hindsight": 0.5383275261324042
+  },
+  "replay": {
+    "1": {
+      "within_target": 0.31670296167247386,
+      "low": 0.30705574912891986,
+      "high": 0.32578397212543553
+    },
+    "2": {
+      "within_target": 0.3566637630662021,
+      "low": 0.3501742160278746,
+      "high": 0.3632404181184669
+    }
+  },
+  "notable": [
+    {
+      "fire": "Donnie Creek",
+      "number": "G80280",
+      "date": "2023-05-11",
+      "size_ha": 619072.5,
+      "nearest_base_km": 182.1,
+      "replays_reached_in_30_min": 0,
+      "outcomes": {
+        "out of range": 20
+      },
+      "replays": 20
+    },
+    {
+      "fire": "Bush Creek East",
+      "number": "K21633",
+      "date": "2023-07-12",
+      "size_ha": 45613.0,
+      "nearest_base_km": 28.1,
+      "replays_reached_in_30_min": 6,
+      "outcomes": {
+        "late": 11,
+        "reached": 6,
+        "grounded by weather": 3
+      },
+      "replays": 20
+    },
+    {
+      "fire": "McDougall Creek",
+      "number": "K52767",
+      "date": "2023-08-15",
+      "size_ha": 13970.4,
+      "nearest_base_km": 5.3,
+      "replays_reached_in_30_min": 20,
+      "outcomes": {
+        "reached": 20
+      },
+      "replays": 20
+    }
+  ]
+}

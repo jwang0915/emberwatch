@@ -1,0 +1,333 @@
+{
+  "features": [
+    "c_lag1",
+    "c_mean3",
+    "c_mean5",
+    "c_mean10",
+    "light_mean10",
+    "person_mean10",
+    "c_mean_all",
+    "large_mean_all",
+    "large_mean_all_blur2",
+    "c_mean10_blur1",
+    "light_mean10_blur1",
+    "c_mean10_blur3",
+    "light_mean10_blur3",
+    "yrs_since_fire",
+    "burned_last1",
+    "burned_last5",
+    "burned_last10",
+    "burned_since2000",
+    "burned_last5_blur3",
+    "land_frac",
+    "road_frac",
+    "road_frac_50km",
+    "dist_town_km",
+    "log_town_pop",
+    "bec_BAFA",
+    "bec_BG",
+    "bec_BWBS",
+    "bec_CDF",
+    "bec_CMA",
+    "bec_CWH",
+    "bec_ESSF",
+    "bec_ICH",
+    "bec_IDF",
+    "bec_IMA",
+    "bec_MH",
+    "bec_MS",
+    "bec_PP",
+    "bec_SBPS",
+    "bec_SBS",
+    "bec_SWB",
+    "east_km",
+    "north_km"
+  ],
+  "large_fire_threshold_ha": 10.0,
+  "all": {
+    "chosen_params": {
+      "num_leaves": 63,
+      "min_data_in_leaf": 50,
+      "lambda_l2": 0.0
+    },
+    "boosting_rounds": 394,
+    "blur_sigma_cells": 1.0,
+    "baseline_history_column": "c_mean10",
+    "per_year": {
+      "2022": {
+        "history": {
+          "poisson_deviance": 0.9961443617538537,
+          "capture_top5": 0.3227953314781189,
+          "capture_top10": 0.5024958252906799,
+          "capture_top20": 0.6860787868499756,
+          "auc_any_fire": 0.8067850913193315
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.5344730489839598,
+          "capture_top5": 0.3028286099433899,
+          "capture_top10": 0.5163615942001343,
+          "capture_top20": 0.7348862886428833,
+          "auc_any_fire": 0.8487963194356175
+        },
+        "model": {
+          "poisson_deviance": 0.5383595403869342,
+          "capture_top5": 0.32889628410339355,
+          "capture_top10": 0.5163615942001343,
+          "capture_top20": 0.7398779988288879,
+          "auc_any_fire": 0.8550444298906092
+        }
+      },
+      "2023": {
+        "history": {
+          "poisson_deviance": 1.5395769271038329,
+          "capture_top5": 0.24836601316928864,
+          "capture_top10": 0.37603485584259033,
+          "capture_top20": 0.586056649684906,
+          "auc_any_fire": 0.756986030633787
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.6759251413249361,
+          "capture_top5": 0.22614379227161407,
+          "capture_top10": 0.36122003197669983,
+          "capture_top20": 0.5703703761100769,
+          "auc_any_fire": 0.8098829378859025
+        },
+        "model": {
+          "poisson_deviance": 0.6674576137233792,
+          "capture_top5": 0.2505446672439575,
+          "capture_top10": 0.40653595328330994,
+          "capture_top20": 0.615686297416687,
+          "auc_any_fire": 0.8316514810706968
+        }
+      },
+      "2024": {
+        "history": {
+          "poisson_deviance": 0.9864016258795867,
+          "capture_top5": 0.3105480372905731,
+          "capture_top10": 0.4625810384750366,
+          "capture_top20": 0.661166787147522,
+          "auc_any_fire": 0.8010922541340296
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.5017339037774425,
+          "capture_top5": 0.28520917892456055,
+          "capture_top10": 0.4790807366371155,
+          "capture_top20": 0.6817914247512817,
+          "auc_any_fire": 0.8531569786084008
+        },
+        "model": {
+          "poisson_deviance": 0.5137775608066942,
+          "capture_top5": 0.28344136476516724,
+          "capture_top10": 0.4861520230770111,
+          "capture_top20": 0.6894519925117493,
+          "auc_any_fire": 0.856371764921442
+        }
+      },
+      "2025": {
+        "history": {
+          "poisson_deviance": 0.7786161536039997,
+          "capture_top5": 0.3151862323284149,
+          "capture_top10": 0.47063037753105164,
+          "capture_top20": 0.6790831089019775,
+          "auc_any_fire": 0.8156802025925849
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.42692271671859683,
+          "capture_top5": 0.3144699037075043,
+          "capture_top10": 0.48925501108169556,
+          "capture_top20": 0.6955587267875671,
+          "auc_any_fire": 0.858660095454532
+        },
+        "model": {
+          "poisson_deviance": 0.41376377429713607,
+          "capture_top5": 0.34885385632514954,
+          "capture_top10": 0.5128939747810364,
+          "capture_top20": 0.7098853588104248,
+          "auc_any_fire": 0.8675122063038211
+        }
+      }
+    },
+    "pooled": {
+      "history": {
+        "poisson_deviance": 1.0751847670853183,
+        "capture_top5": 0.29578641057014465,
+        "capture_top10": 0.4454178810119629,
+        "capture_top20": 0.6445556879043579,
+        "auc_any_fire": 0.789576608818334
+      },
+      "history_smoothed": {
+        "poisson_deviance": 0.5347637027012339,
+        "capture_top5": 0.27395355701446533,
+        "capture_top10": 0.453205406665802,
+        "capture_top20": 0.6636072993278503,
+        "auc_any_fire": 0.8369383113933562
+      },
+      "model": {
+        "poisson_deviance": 0.5333396223035359,
+        "capture_top5": 0.2971770167350769,
+        "capture_top10": 0.47392573952674866,
+        "capture_top20": 0.6840494871139526,
+        "auc_any_fire": 0.8494534834205032
+      }
+    },
+    "planning_surface_vs_2022_2025": {
+      "model": {
+        "poisson_deviance": 2.2687813924589415,
+        "capture_top5": 0.2988457679748535,
+        "capture_top10": 0.4772632420063019,
+        "capture_top20": 0.6882213950157166,
+        "auc_any_fire": 0.8779689994742147
+      },
+      "history_2000_2021": {
+        "poisson_deviance": 2.8376426501005083,
+        "capture_top5": 0.30649423599243164,
+        "capture_top10": 0.47559449076652527,
+        "capture_top20": 0.6698651313781738,
+        "auc_any_fire": 0.8339837860627516
+      }
+    }
+  },
+  "large": {
+    "chosen_params": {
+      "num_leaves": 63,
+      "min_data_in_leaf": 200,
+      "lambda_l2": 5.0
+    },
+    "boosting_rounds": 357,
+    "blur_sigma_cells": 1.5,
+    "baseline_history_column": "large_mean_all",
+    "per_year": {
+      "2022": {
+        "history": {
+          "poisson_deviance": 0.2554475516341993,
+          "capture_top5": 0.1882352977991104,
+          "capture_top10": 0.34705883264541626,
+          "capture_top20": 0.5117647051811218,
+          "auc_any_fire": 0.6634284823521652
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.12218543442623878,
+          "capture_top5": 0.2235294133424759,
+          "capture_top10": 0.34705883264541626,
+          "capture_top20": 0.5235294103622437,
+          "auc_any_fire": 0.7451906877469407
+        },
+        "model": {
+          "poisson_deviance": 0.12446416034343495,
+          "capture_top5": 0.20000000298023224,
+          "capture_top10": 0.34705883264541626,
+          "capture_top20": 0.5058823823928833,
+          "auc_any_fire": 0.7392778986875792
+        }
+      },
+      "2023": {
+        "history": {
+          "poisson_deviance": 0.6554554310572551,
+          "capture_top5": 0.18872548639774323,
+          "capture_top10": 0.25245097279548645,
+          "capture_top20": 0.40931373834609985,
+          "auc_any_fire": 0.6111818131206285
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.26191449721390814,
+          "capture_top5": 0.2083333283662796,
+          "capture_top10": 0.28921568393707275,
+          "capture_top20": 0.44117647409439087,
+          "auc_any_fire": 0.7286643014039741
+        },
+        "model": {
+          "poisson_deviance": 0.26740698883711994,
+          "capture_top5": 0.15441176295280457,
+          "capture_top10": 0.24754901230335236,
+          "capture_top20": 0.4362744987010956,
+          "auc_any_fire": 0.7262974360012552
+        }
+      },
+      "2024": {
+        "history": {
+          "poisson_deviance": 0.3653655265642815,
+          "capture_top5": 0.18677042424678802,
+          "capture_top10": 0.2684824764728546,
+          "capture_top20": 0.5097275972366333,
+          "auc_any_fire": 0.667241835081436
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.1685517632107382,
+          "capture_top5": 0.21789883077144623,
+          "capture_top10": 0.330739289522171,
+          "capture_top20": 0.5408560037612915,
+          "auc_any_fire": 0.7705295471987721
+        },
+        "model": {
+          "poisson_deviance": 0.16782315061998987,
+          "capture_top5": 0.24513618648052216,
+          "capture_top10": 0.3813229501247406,
+          "capture_top20": 0.6031128168106079,
+          "auc_any_fire": 0.7844913447599557
+        }
+      },
+      "2025": {
+        "history": {
+          "poisson_deviance": 0.23340262434088707,
+          "capture_top5": 0.1388888955116272,
+          "capture_top10": 0.2361111044883728,
+          "capture_top20": 0.3958333432674408,
+          "auc_any_fire": 0.6342717646312852
+        },
+        "history_smoothed": {
+          "poisson_deviance": 0.10580981087197665,
+          "capture_top5": 0.0972222238779068,
+          "capture_top10": 0.2361111044883728,
+          "capture_top20": 0.4513888955116272,
+          "auc_any_fire": 0.7687584103030175
+        },
+        "model": {
+          "poisson_deviance": 0.10741373029213029,
+          "capture_top5": 0.1597222238779068,
+          "capture_top10": 0.3055555522441864,
+          "capture_top20": 0.5069444179534912,
+          "auc_any_fire": 0.7513812271468729
+        }
+      }
+    },
+    "pooled": {
+      "history": {
+        "poisson_deviance": 0.37741778339915577,
+        "capture_top5": 0.19509704411029816,
+        "capture_top10": 0.25944840908050537,
+        "capture_top20": 0.4545454680919647,
+        "auc_any_fire": 0.6377138098266342
+      },
+      "history_smoothed": {
+        "poisson_deviance": 0.16461537643071544,
+        "capture_top5": 0.1879468858242035,
+        "capture_top10": 0.30030643939971924,
+        "capture_top20": 0.47497445344924927,
+        "auc_any_fire": 0.7445581758856985
+      },
+      "model": {
+        "poisson_deviance": 0.16677700752316876,
+        "capture_top5": 0.18590398132801056,
+        "capture_top10": 0.3105209469795227,
+        "capture_top20": 0.5097037553787231,
+        "auc_any_fire": 0.7470543042573479
+      }
+    },
+    "planning_surface_vs_2022_2025": {
+      "model": {
+        "poisson_deviance": 0.6108101411338404,
+        "capture_top5": 0.18590398132801056,
+        "capture_top10": 0.32073545455932617,
+        "capture_top20": 0.49948927760124207,
+        "auc_any_fire": 0.7598822881814121
+      },
+      "history_2000_2021": {
+        "poisson_deviance": 1.4970118682883242,
+        "capture_top5": 0.16853933036327362,
+        "capture_top10": 0.2737487256526947,
+        "capture_top20": 0.449438214302063,
+        "auc_any_fire": 0.6264916603654571
+      }
+    }
+  }
+}

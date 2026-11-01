@@ -1,0 +1,649 @@
+{
+  "versions": {
+    "M0": {
+      "params": {
+        "num_leaves": 31,
+        "min_data_in_leaf": 50
+      },
+      "rounds": 259,
+      "pooled": {
+        "poisson_deviance": 0.16957202761388127,
+        "mean_monthly_capture_top10": 0.5027106955647469
+      },
+      "per_year": {
+        "2022": {
+          "predicted_total": 1040.1036737990908,
+          "actual_total": 1509,
+          "centre_month_error_pct": 64.12362540803417,
+          "by_centre": {
+            "Cariboo": [
+              118,
+              179
+            ],
+            "Coastal": [
+              150,
+              227
+            ],
+            "Kamloops": [
+              243,
+              390
+            ],
+            "Northwest": [
+              50,
+              105
+            ],
+            "Prince George": [
+              200,
+              207
+            ],
+            "Southeast": [
+              216,
+              401
+            ]
+          }
+        },
+        "2023": {
+          "predicted_total": 1108.580783499483,
+          "actual_total": 2118,
+          "centre_month_error_pct": 54.764499995347364,
+          "by_centre": {
+            "Cariboo": [
+              147,
+              206
+            ],
+            "Coastal": [
+              158,
+              350
+            ],
+            "Kamloops": [
+              252,
+              373
+            ],
+            "Northwest": [
+              53,
+              263
+            ],
+            "Prince George": [
+              209,
+              635
+            ],
+            "Southeast": [
+              227,
+              291
+            ]
+          }
+        },
+        "2024": {
+          "predicted_total": 1104.4349590336196,
+          "actual_total": 1542,
+          "centre_month_error_pct": 44.908822093701154,
+          "by_centre": {
+            "Cariboo": [
+              148,
+              203
+            ],
+            "Coastal": [
+              165,
+              143
+            ],
+            "Kamloops": [
+              240,
+              387
+            ],
+            "Northwest": [
+              63,
+              79
+            ],
+            "Prince George": [
+              199,
+              383
+            ],
+            "Southeast": [
+              224,
+              347
+            ]
+          }
+        },
+        "2025": {
+          "predicted_total": 1080.900423266457,
+          "actual_total": 1164,
+          "centre_month_error_pct": 37.36813997599636,
+          "by_centre": {
+            "Cariboo": [
+              142,
+              195
+            ],
+            "Coastal": [
+              165,
+              209
+            ],
+            "Kamloops": [
+              236,
+              233
+            ],
+            "Northwest": [
+              61,
+              42
+            ],
+            "Prince George": [
+              192,
+              273
+            ],
+            "Southeast": [
+              221,
+              212
+            ]
+          }
+        }
+      }
+    },
+    "M1": {
+      "params": {
+        "num_leaves": 31,
+        "min_data_in_leaf": 50
+      },
+      "rounds": 354,
+      "pooled": {
+        "poisson_deviance": 0.1727379202197658,
+        "mean_monthly_capture_top10": 0.5022131070494652
+      },
+      "per_year": {
+        "2022": {
+          "predicted_total": 737.5861444887438,
+          "actual_total": 1509,
+          "centre_month_error_pct": 76.69217701538813,
+          "by_centre": {
+            "Cariboo": [
+              75,
+              179
+            ],
+            "Coastal": [
+              108,
+              227
+            ],
+            "Kamloops": [
+              173,
+              390
+            ],
+            "Northwest": [
+              38,
+              105
+            ],
+            "Prince George": [
+              163,
+              207
+            ],
+            "Southeast": [
+              131,
+              401
+            ]
+          }
+        },
+        "2023": {
+          "predicted_total": 1161.521302530221,
+          "actual_total": 2118,
+          "centre_month_error_pct": 57.51568203367277,
+          "by_centre": {
+            "Cariboo": [
+              140,
+              206
+            ],
+            "Coastal": [
+              146,
+              350
+            ],
+            "Kamloops": [
+              277,
+              373
+            ],
+            "Northwest": [
+              62,
+              263
+            ],
+            "Prince George": [
+              211,
+              635
+            ],
+            "Southeast": [
+              258,
+              291
+            ]
+          }
+        },
+        "2024": {
+          "predicted_total": 1232.3743068573035,
+          "actual_total": 1542,
+          "centre_month_error_pct": 33.553608885038955,
+          "by_centre": {
+            "Cariboo": [
+              148,
+              203
+            ],
+            "Coastal": [
+              165,
+              143
+            ],
+            "Kamloops": [
+              275,
+              387
+            ],
+            "Northwest": [
+              72,
+              79
+            ],
+            "Prince George": [
+              226,
+              383
+            ],
+            "Southeast": [
+              277,
+              347
+            ]
+          }
+        },
+        "2025": {
+          "predicted_total": 1152.5238094191336,
+          "actual_total": 1164,
+          "centre_month_error_pct": 36.40648312494999,
+          "by_centre": {
+            "Cariboo": [
+              145,
+              195
+            ],
+            "Coastal": [
+              176,
+              209
+            ],
+            "Kamloops": [
+              250,
+              233
+            ],
+            "Northwest": [
+              66,
+              42
+            ],
+            "Prince George": [
+              216,
+              273
+            ],
+            "Southeast": [
+              230,
+              212
+            ]
+          }
+        }
+      }
+    },
+    "M2": {
+      "params": {
+        "num_leaves": 31,
+        "min_data_in_leaf": 200
+      },
+      "rounds": 451,
+      "pooled": {
+        "poisson_deviance": 0.17712569538152026,
+        "mean_monthly_capture_top10": 0.5010559663176537
+      },
+      "per_year": {
+        "2022": {
+          "predicted_total": 827.9871086605739,
+          "actual_total": 1509,
+          "centre_month_error_pct": 61.57757096175973,
+          "by_centre": {
+            "Cariboo": [
+              87,
+              179
+            ],
+            "Coastal": [
+              122,
+              227
+            ],
+            "Kamloops": [
+              208,
+              390
+            ],
+            "Northwest": [
+              36,
+              105
+            ],
+            "Prince George": [
+              149,
+              207
+            ],
+            "Southeast": [
+              183,
+              401
+            ]
+          }
+        },
+        "2023": {
+          "predicted_total": 908.7012325374528,
+          "actual_total": 2118,
+          "centre_month_error_pct": 61.91063593188202,
+          "by_centre": {
+            "Cariboo": [
+              108,
+              206
+            ],
+            "Coastal": [
+              121,
+              350
+            ],
+            "Kamloops": [
+              205,
+              373
+            ],
+            "Northwest": [
+              55,
+              263
+            ],
+            "Prince George": [
+              170,
+              635
+            ],
+            "Southeast": [
+              193,
+              291
+            ]
+          }
+        },
+        "2024": {
+          "predicted_total": 706.654815879372,
+          "actual_total": 1542,
+          "centre_month_error_pct": 58.564337284302326,
+          "by_centre": {
+            "Cariboo": [
+              78,
+              203
+            ],
+            "Coastal": [
+              106,
+              143
+            ],
+            "Kamloops": [
+              145,
+              387
+            ],
+            "Northwest": [
+              46,
+              79
+            ],
+            "Prince George": [
+              133,
+              383
+            ],
+            "Southeast": [
+              153,
+              347
+            ]
+          }
+        },
+        "2025": {
+          "predicted_total": 1004.4250943041068,
+          "actual_total": 1164,
+          "centre_month_error_pct": 38.59141682809855,
+          "by_centre": {
+            "Cariboo": [
+              126,
+              195
+            ],
+            "Coastal": [
+              154,
+              209
+            ],
+            "Kamloops": [
+              212,
+              233
+            ],
+            "Northwest": [
+              55,
+              42
+            ],
+            "Prince George": [
+              185,
+              273
+            ],
+            "Southeast": [
+              217,
+              212
+            ]
+          }
+        }
+      },
+      "share_of_gain": {
+        "history": 0.7458998281008786,
+        "so_far": 0.09423299448130301,
+        "weather": 0.15986717741781845
+      }
+    }
+  },
+  "movable": {
+    "per_month": {
+      "2022": [
+        {
+          "month": 5,
+          "fires": 56,
+          "fixed": 35,
+          "M0": 37,
+          "M1": 35,
+          "M2": 39,
+          "hindsight": 51
+        },
+        {
+          "month": 6,
+          "fires": 71,
+          "fixed": 24,
+          "M0": 28,
+          "M1": 24,
+          "M2": 27,
+          "hindsight": 53
+        },
+        {
+          "month": 7,
+          "fires": 274,
+          "fixed": 156,
+          "M0": 161,
+          "M1": 149,
+          "M2": 165,
+          "hindsight": 204
+        },
+        {
+          "month": 8,
+          "fires": 922,
+          "fixed": 531,
+          "M0": 570,
+          "M1": 561,
+          "M2": 574,
+          "hindsight": 700
+        },
+        {
+          "month": 9,
+          "fires": 186,
+          "fixed": 113,
+          "M0": 116,
+          "M1": 119,
+          "M2": 126,
+          "hindsight": 146
+        }
+      ],
+      "2023": [
+        {
+          "month": 5,
+          "fires": 227,
+          "fixed": 107,
+          "M0": 105,
+          "M1": 108,
+          "M2": 114,
+          "hindsight": 159
+        },
+        {
+          "month": 6,
+          "fires": 303,
+          "fixed": 107,
+          "M0": 128,
+          "M1": 110,
+          "M2": 118,
+          "hindsight": 177
+        },
+        {
+          "month": 7,
+          "fires": 990,
+          "fixed": 383,
+          "M0": 383,
+          "M1": 377,
+          "M2": 365,
+          "hindsight": 591
+        },
+        {
+          "month": 8,
+          "fires": 483,
+          "fixed": 249,
+          "M0": 257,
+          "M1": 259,
+          "M2": 251,
+          "hindsight": 350
+        },
+        {
+          "month": 9,
+          "fires": 116,
+          "fixed": 55,
+          "M0": 52,
+          "M1": 54,
+          "M2": 57,
+          "hindsight": 93
+        }
+      ],
+      "2024": [
+        {
+          "month": 5,
+          "fires": 95,
+          "fixed": 54,
+          "M0": 62,
+          "M1": 57,
+          "M2": 61,
+          "hindsight": 75
+        },
+        {
+          "month": 6,
+          "fires": 114,
+          "fixed": 54,
+          "M0": 65,
+          "M1": 60,
+          "M2": 53,
+          "hindsight": 90
+        },
+        {
+          "month": 7,
+          "fires": 773,
+          "fixed": 356,
+          "M0": 438,
+          "M1": 434,
+          "M2": 413,
+          "hindsight": 556
+        },
+        {
+          "month": 8,
+          "fires": 479,
+          "fixed": 281,
+          "M0": 315,
+          "M1": 308,
+          "M2": 299,
+          "hindsight": 371
+        },
+        {
+          "month": 9,
+          "fires": 81,
+          "fixed": 59,
+          "M0": 59,
+          "M1": 56,
+          "M2": 59,
+          "hindsight": 78
+        }
+      ],
+      "2025": [
+        {
+          "month": 5,
+          "fires": 132,
+          "fixed": 67,
+          "M0": 72,
+          "M1": 70,
+          "M2": 69,
+          "hindsight": 97
+        },
+        {
+          "month": 6,
+          "fires": 169,
+          "fixed": 101,
+          "M0": 105,
+          "M1": 109,
+          "M2": 102,
+          "hindsight": 127
+        },
+        {
+          "month": 7,
+          "fires": 302,
+          "fixed": 155,
+          "M0": 157,
+          "M1": 155,
+          "M2": 158,
+          "hindsight": 225
+        },
+        {
+          "month": 8,
+          "fires": 387,
+          "fixed": 238,
+          "M0": 240,
+          "M1": 244,
+          "M2": 256,
+          "hindsight": 301
+        },
+        {
+          "month": 9,
+          "fires": 174,
+          "fixed": 118,
+          "M0": 113,
+          "M1": 115,
+          "M2": 116,
+          "hindsight": 134
+        }
+      ]
+    },
+    "share_reached": {
+      "fixed": 0.5119987369750553,
+      "M0": 0.5467319229554783,
+      "M1": 0.5374171139880013,
+      "M2": 0.5402589201136723,
+      "hindsight": 0.7227660246289864
+    },
+    "per_year_share": {
+      "2022": {
+        "fixed": 0.5692511597084162,
+        "M0": 0.6043737574552683,
+        "M1": 0.588469184890656,
+        "M2": 0.6169648774022531,
+        "hindsight": 0.7647448641484427
+      },
+      "2023": {
+        "fixed": 0.4252005663048608,
+        "M0": 0.43652666352052855,
+        "M1": 0.4285040113260972,
+        "M2": 0.42708824917413873,
+        "hindsight": 0.6465313827277017
+      },
+      "2024": {
+        "fixed": 0.5214007782101168,
+        "M0": 0.6089494163424124,
+        "M1": 0.5933852140077821,
+        "M2": 0.5739299610894941,
+        "hindsight": 0.7587548638132295
+      },
+      "2025": {
+        "fixed": 0.5833333333333334,
+        "M0": 0.5902061855670103,
+        "M1": 0.595360824742268,
+        "M2": 0.602233676975945,
+        "hindsight": 0.7594501718213058
+      }
+    }
+  }
+}

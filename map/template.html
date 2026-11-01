@@ -1,0 +1,1372 @@
+<title>Emberwatch: wildfire drone placement for British Columbia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f4f7fa;
+  --panel: #ffffff;
+  --ink: #1d2733;
+  --ink-2: #4c5a69;
+  --ink-3: #66737f;
+  --rule: #d3dbe4;
+  --rule-2: #e8eef4;
+  --land: #e8edf2;
+  --outline: #8a96a3;
+  --accent: #2b4a6b;
+  --accent-ink: #1e3550;
+  --orange: #e2692c;
+  --bar: #2b4a6b;
+  --fire-dot: rgba(29, 39, 51, 0.55);
+  --s1: #2b4a6b; --s2: #6f9fcf; --s3: #e2692c; --s4: #9c3f12; --s5: #f3a26b; --ceiling: #a3adb8;
+  --r0: #fdeee2; --r1: #fbd3b4; --r2: #f7b183; --r3: #f08b52; --r4: #e2692c; --r5: #b94b18; --r6: #7f2f0c;
+  --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b; --grounded: #8e9892;
+  --shadow: 0 1px 2px rgba(20, 28, 24, 0.06), 0 4px 16px rgba(20, 28, 24, 0.05);
+  --display: "Montserrat", "Segoe UI", Arial, sans-serif;
+  --sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Montserrat", system-ui, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0f1722; --panel: #162232; --ink: #e8eef4; --ink-2: #b5c3d1; --ink-3: #8697a8;
+    --rule: #26374a; --rule-2: #1c2a3a; --land: #1b2836; --outline: #5b6e82;
+    --accent: #6f9fcf; --accent-ink: #a9c6e8; --orange: #f08b52; --bar: #24405e; --fire-dot: rgba(232, 238, 244, 0.5);
+    --s1: #a9c6e8; --s2: #5b86b8; --s3: #ec7a3f; --s4: #b94b18; --s5: #f6c39b; --ceiling: #6f7f8f;
+    --r0: #35231a; --r1: #57301b; --r2: #7f3b1a; --r3: #ad4a1d; --r4: #d9612b; --r5: #f48b55; --r6: #ffbd8f;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1722; --panel: #162232; --ink: #e8eef4; --ink-2: #b5c3d1; --ink-3: #8697a8;
+    --rule: #26374a; --rule-2: #1c2a3a; --land: #1b2836; --outline: #5b6e82;
+    --accent: #6f9fcf; --accent-ink: #a9c6e8; --orange: #f08b52; --bar: #24405e; --fire-dot: rgba(232, 238, 244, 0.5);
+    --s1: #a9c6e8; --s2: #5b86b8; --s3: #ec7a3f; --s4: #b94b18; --s5: #f6c39b; --ceiling: #6f7f8f;
+  --r0: #35231a; --r1: #57301b; --r2: #7f3b1a; --r3: #ad4a1d; --r4: #d9612b; --r5: #f48b55; --r6: #ffbd8f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--sans); }
+.page { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); padding-block: 32px 64px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: 0.005em; text-wrap: balance; margin: 0; line-height: 1.05; }
+h1 { font-size: clamp(36px, 5.2vw, 60px); font-weight: 700; }
+h2 { font-size: clamp(26px, 3vw, 34px); }
+h3 { font-size: 20px; }
+p { margin: 0; }
+.eyebrow, .label { font: 500 12px/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.lede { font-size: 17px; color: var(--ink-2); max-width: 64ch; }
+header { display: grid; gap: 14px; margin-bottom: 28px; }
+.findings { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 28px; margin-top: 10px; border-top: 1px solid var(--rule); padding-top: 18px; }
+.finding { display: grid; gap: 4px; align-content: start; }
+.finding .num { font: 600 34px/1 var(--display); color: var(--ink); font-variant-numeric: tabular-nums; }
+.finding p { color: var(--ink-2); font-size: 14px; max-width: 42ch; }
+
+.mapwrap { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
+@media (max-width: 960px) { .mapwrap { grid-template-columns: 1fr; } }
+.map-card, .panel, .card { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
+.map-card { padding: 12px; display: grid; gap: 10px; min-width: 0; }
+.canvas-box { position: relative; width: 100%; aspect-ratio: 1640 / 1400; max-width: 100%; }
+#map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; border-radius: 6px; cursor: crosshair; touch-action: pan-y; }
+.tip { position: absolute; pointer-events: none; z-index: 5; background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; box-shadow: var(--shadow); padding: 8px 10px; font-size: 13px; line-height: 1.4; max-width: 260px; }
+.tip b { font-weight: 600; }
+.tip .mono { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+.panel { padding: 16px; display: grid; gap: 18px; }
+.ctl { display: grid; gap: 8px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; padding: 2px; background: var(--bg); gap: 2px; flex-wrap: wrap; }
+.seg button { font: 500 13px/1 var(--sans); color: var(--ink-2); background: transparent; border: 0; border-radius: 6px; padding: 8px 11px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--panel); color: var(--ink); box-shadow: 0 0 0 1px var(--rule); }
+.seg button:disabled { opacity: 0.45; cursor: not-allowed; }
+button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+select { font: 500 14px var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; width: 100%; }
+input[type="range"] { width: 100%; accent-color: var(--accent); }
+.row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.val { font: 500 13px var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; }
+.checks { display: grid; gap: 6px; }
+.checks label { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+.stat { display: grid; gap: 2px; padding-top: 12px; border-top: 1px solid var(--rule-2); }
+.stat .big { font: 600 44px/1 var(--display); font-variant-numeric: tabular-nums; }
+.stat .sub { font-size: 13px; color: var(--ink-2); }
+.minis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini { display: grid; gap: 2px; }
+.mini .n { font: 600 24px/1.05 var(--display); font-variant-numeric: tabular-nums; }
+.mini .t { font-size: 12px; color: var(--ink-3); line-height: 1.3; }
+.note { font-size: 13px; color: var(--ink-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; font-size: 12.5px; color: var(--ink-2); padding: 2px 4px; }
+.legend .item { display: inline-flex; align-items: center; gap: 6px; }
+.ramp { display: inline-flex; border-radius: 3px; overflow: hidden; }
+.ramp i { width: 16px; height: 10px; display: block; }
+.sw { width: 12px; height: 12px; display: inline-block; flex: none; }
+.btn { font: 600 13px var(--sans); color: #fff; background: var(--accent); border: 0; border-radius: 8px; padding: 9px 14px; cursor: pointer; }
+.clock { font: 600 40px/1 var(--display); font-variant-numeric: tabular-nums; }
+.counts { display: grid; gap: 6px; font-size: 13px; }
+.counts div { display: grid; grid-template-columns: 16px 1fr auto; gap: 8px; align-items: center; color: var(--ink-2); }
+.counts svg { display: block; }
+.counts .val { color: var(--ink); }
+
+section.block { margin-top: 44px; display: grid; gap: 16px; }
+.block-head { display: grid; gap: 8px; max-width: 72ch; }
+.block-head p { color: var(--ink-2); }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
+.card { padding: 16px; display: grid; gap: 12px; min-width: 0; align-content: start; }
+.card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.card-head p { color: var(--ink-2); font-size: 13.5px; max-width: 60ch; }
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.chart svg text { font-family: var(--mono); font-size: 11px; fill: var(--ink-3); }
+.keys { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); }
+.keys span { display: inline-flex; align-items: center; gap: 6px; }
+.keys i { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+.bars { display: grid; gap: 9px; }
+.bar { display: grid; grid-template-columns: minmax(120px, 42%) 1fr; gap: 10px; align-items: center; font-size: 13px; color: var(--ink-2); }
+.bar .track { position: relative; height: 14px; display: flex; align-items: center; gap: 8px; }
+.bar .fill { height: 14px; border-radius: 0 4px 4px 0; background: var(--accent); min-width: 2px; }
+.bar .v { font: 500 12px var(--mono); color: var(--ink); white-space: nowrap; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 7px 8px; border-bottom: 1px solid var(--rule-2); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; white-space: normal; }
+th { font: 500 11px var(--mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3); }
+td.best { font-weight: 600; color: var(--ink); }
+.scroll { overflow-x: auto; }
+details { font-size: 13px; color: var(--ink-2); }
+details summary { cursor: pointer; color: var(--accent-ink); }
+dl.assume { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 24px; margin: 0; }
+dl.assume div { display: grid; gap: 2px; }
+dl.assume dt { font-size: 13px; color: var(--ink-2); }
+dl.assume dd { margin: 0; font: 600 24px/1.1 var(--display); }
+ul.caveats { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--ink-2); max-width: 80ch; }
+footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--ink-3); display: grid; gap: 6px; }
+footer a { color: var(--accent-ink); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Emberwatch look, matching the research poster */
+.hero { background: #1e3550; color: #f6f9fb; border-radius: 12px; padding: clamp(20px, 4vw, 40px); display: grid; gap: 14px; }
+.hero .eyebrow { color: #f39a62; font-weight: 700; }
+.hero h1 { color: #f6f9fb; font-weight: 800; letter-spacing: -0.01em; }
+.hero .lede { color: #d5e2ef; }
+.hero .links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.hero .links a { color: #1e3550; background: #f6f9fb; border-radius: 8px; padding: 9px 14px; font-weight: 600; font-size: 14px; text-decoration: none; }
+.hero .links a.alt { color: #f6f9fb; background: transparent; box-shadow: inset 0 0 0 1px #8fb4d8; }
+header { margin-bottom: 20px; }
+.findings { border-top: 0; padding-top: 6px; margin-bottom: 28px; }
+.finding .num { color: var(--orange); font-weight: 800; }
+.block-head h2 { background: var(--bar); color: #f6f9fb; padding: 10px 16px; border-radius: 8px; font-weight: 700; }
+.block-head { max-width: none; }
+.block-head p { max-width: 80ch; }
+h1 { font-size: clamp(30px, 4.4vw, 52px); }
+h2 { font-size: clamp(20px, 2.4vw, 26px); }
+.figure { background: #ffffff; border-radius: 8px; padding: 10px; }
+.figure svg { width: 100%; height: auto; display: block; }
+.figure svg text { font-family: "Montserrat", Arial, sans-serif !important; }
+@media (prefers-color-scheme: dark) { .hero { box-shadow: 0 0 0 1px var(--rule); } }
+.facts { display: grid; gap: 8px; }
+.facts table td:last-child, .facts table th:last-child { text-align: right; }
+tr.hl td { background: rgba(226, 105, 44, 0.12); font-weight: 600; }
+footer a { color: var(--accent-ink); }
+</style>
+<!--/head-->
+<div class="page">
+  <header class="hero">
+    <p class="eyebrow">Emberwatch · James Wang, West Point Grey Academy</p>
+    <h1>Where should British Columbia put wildfire detection drones?</h1>
+    <p class="lede">Emberwatch combines a machine learning forecast of where wildfires start with an integer program that chooses drone base sites, then replays real fire seasons to see what the network would deliver. Every choice on this page was made using data up to the end of 2021 and scored against the wildfires that actually started in 2022 to 2025.</p>
+    <div class="links">
+      <a href="Emberwatch_poster.pdf">Research poster, PDF</a>
+      <a class="alt" id="repo-link" href="#" hidden>Code on GitHub</a>
+    </div>
+  </header>
+  <div class="findings" id="findings"></div>
+
+  <section class="mapwrap" aria-label="Interactive map">
+    <div class="map-card">
+      <div class="row" style="flex-wrap: wrap;">
+        <div class="seg" role="group" aria-label="Map mode">
+          <button id="mode-plan" aria-pressed="true">Plan a network</button>
+          <button id="mode-replay" aria-pressed="false">Replay the busiest day</button>
+        </div>
+        <span class="label" id="map-caption"></span>
+      </div>
+      <div class="canvas-box" id="canvas-box">
+        <canvas id="map" aria-label="Map of British Columbia showing fire risk, drone bases and wildfires"></canvas>
+        <div class="tip" id="tip" hidden></div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <aside class="panel">
+      <div id="plan-controls" class="panel-body" style="display: grid; gap: 18px;">
+        <div class="ctl">
+          <label class="label" for="strategy">How bases are chosen</label>
+          <select id="strategy">
+            <option value="model">Optimized on the risk model</option>
+            <option value="hist">Optimized on 22 years of history</option>
+            <option value="area">Spread evenly over BC</option>
+            <option value="towns">Biggest towns first</option>
+            <option value="oracle">Hindsight: optimized on 2022–25 fires</option>
+          </select>
+        </div>
+        <div class="ctl">
+          <span class="label">Optimize for</span>
+          <div class="seg" role="group" aria-label="Optimize for">
+            <button id="w-all" aria-pressed="true">All wildfires</button>
+            <button id="w-large" aria-pressed="false">Fires past 10 ha</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <div class="row"><label class="label" for="k">Number of bases</label><span class="val" id="k-val"></span></div>
+          <input type="range" id="k" min="0" max="8" step="1" value="5">
+        </div>
+        <div class="ctl checks">
+          <label><input type="checkbox" id="show-risk" checked> Fire-risk surface</label>
+          <label><input type="checkbox" id="show-fires" checked> Wildfires, 2022–25</label>
+          <label><input type="checkbox" id="show-rings" checked> 30-minute reach of each base</label>
+        </div>
+        <div class="stat">
+          <span class="label">Reachable within 30 minutes</span>
+          <span class="big" id="st-cov"></span>
+          <span class="sub" id="st-cov-sub"></span>
+        </div>
+        <div class="minis">
+          <div class="mini"><span class="n" id="st-large"></span><span class="t">of fires that grew past 10 ha</span></div>
+          <div class="mini"><span class="n" id="st-dist"></span><span class="t">median distance, fire to nearest base</span></div>
+        </div>
+      </div>
+
+      <div id="replay-controls" hidden style="display: grid; gap: 16px;">
+        <div class="ctl">
+          <span class="label" id="rp-title"></span>
+          <p class="note" id="rp-note"></p>
+        </div>
+        <div class="ctl">
+          <span class="label">Drones at each base</span>
+          <div class="seg" role="group" aria-label="Drones per base">
+            <button id="m1" aria-pressed="true">One</button>
+            <button id="m2" aria-pressed="false">Two</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <div class="row"><span class="clock" id="clock">18:00</span><button class="btn" id="play">Play the day</button></div>
+          <label class="label" for="time" style="margin-top: 4px;">Time of day</label>
+          <input type="range" id="time" min="0" max="1439" step="5" value="1080">
+        </div>
+        <div class="counts" id="counts"></div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Where the bases go matters more than how the risk is predicted</h2>
+      <p>Each line is a way of choosing sites, scored on the real 2022–25 fires. With 30 bases, siting on fire risk reaches 53% of fires, against 30% for even spacing. The machine-learning risk map and plain history land almost on top of each other, and both sit close to the hindsight line, which no real planner could reach.</p>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <p id="c1-sub"></p>
+        <div class="seg" role="group" aria-label="Score on">
+          <button id="c1-all" aria-pressed="true">All wildfires</button>
+          <button id="c1-large" aria-pressed="false">Fires past 10 ha</button>
+        </div>
+      </div>
+      <div class="keys" id="c1-keys"></div>
+      <div class="chart" id="c1"></div>
+      <details><summary>Show the numbers</summary><div class="scroll" id="c1-table"></div></details>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Distance is not the same as being there</h2>
+      <p>The replay sends a drone to every 2022–25 wildfire, one at a time, on the day it started. Drones get busy, 15% of calls are grounded by weather, and lightning storms start dozens of fires in an afternoon. Coverage drawn on a map overstates what the network delivers.</p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-head"><p>Share of 2022–25 wildfires with a drone overhead within 30 minutes. Averages of 20 replays with different report times and weather; they vary by about one point.</p></div>
+        <div class="keys" id="c2-keys"></div>
+        <div class="chart" id="c2"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><p id="c3-sub"></p></div>
+        <div class="bars" id="c3"></div>
+        <p class="note" id="c3-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>What the risk model learned</h2>
+      <p>A gradient-boosted model with a Poisson loss predicts how many wildfires will start in each 10 km cell next season. It only sees years before the one it predicts. Trained on 2010–19, tuned on 2020–21, tested on 2022–25.</p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>What it leans on</h3>
+        <p class="note">Share of the model's total gain from each input. Past fires dominate; roads and recent burns add a little.</p>
+        <div class="bars" id="imp"></div>
+      </div>
+      <div class="card">
+        <h3>How it scores against history</h3>
+        <p class="note">One season ahead, 2022–25 pooled. "Top 10% of cells" is the share of next season's fires that land in the 10% of cells ranked riskiest.</p>
+        <div class="scroll" id="risk-table"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>The 2023 stress test</h2>
+      <p>2023 was BC’s record season, so the model was retrained as if it were 31 December 2022 and then scored on what happened. It forecast 1,449 wildfires against 2,296 real ones. It was close in the south and far off in the north, where fires had been rare.</p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Forecast against actual, by fire centre</h3>
+        <div class="figure"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="459.524pt" height="236.94pt" viewBox="0 0 459.524 236.94" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 236.94 
+L 459.524 236.94 
+L 459.524 0 
+L 0 0 
+L 0 236.94 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 52.004 199.8 
+L 453.764 199.8 
+L 453.764 5.76 
+L 52.004 5.76 
+L 52.004 199.8 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m6ad698672f" d="M 0 0 
+L 0 3.5 
+" style="stroke: #5d6b7a; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m6ad698672f" x="93.808929" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 10px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="93.808929" y="216.48" transform="rotate(-0 93.808929 216.48)">Kamloops</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m6ad698672f" x="157.438957" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 10px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="157.438957" y="216.48" transform="rotate(-0 157.438957 216.48)">Southeast</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m6ad698672f" x="221.068986" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 10px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="221.068986" y="216.48" transform="rotate(-0 221.068986 216.48)">Cariboo</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m6ad698672f" x="284.699014" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 10px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="284.699014" y="216.48" transform="rotate(-0 284.699014 216.48)">Coastal</text>
+     </g>
+    </g>
+    <g id="xtick_5">
+     <g id="line2d_5">
+      <g>
+       <use xlink:href="#m6ad698672f" x="348.329043" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 10px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(332.368887 216.48)">Prince</text>
+      <text style="font-size: 10px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(329.918887 228.67)">George</text>
+     </g>
+    </g>
+    <g id="xtick_6">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#m6ad698672f" x="411.959071" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 10px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(395.354384 216.48)">North-</text>
+      <text style="font-size: 10px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(400.143446 228.67)">west</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7">
+      <path d="M 52.004 199.8 
+L 453.764 199.8 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <defs>
+       <path id="m640c766d3c" d="M 0 0 
+L -3.5 0 
+" style="stroke: #5d6b7a; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="205.124" transform="rotate(-0 45.004 205.124)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_9">
+      <path d="M 52.004 174.268421 
+L 453.764 174.268421 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="174.268421" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="179.592421" transform="rotate(-0 45.004 179.592421)">100</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_11">
+      <path d="M 52.004 148.736842 
+L 453.764 148.736842 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="148.736842" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="154.060842" transform="rotate(-0 45.004 154.060842)">200</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_13">
+      <path d="M 52.004 123.205263 
+L 453.764 123.205263 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="123.205263" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="128.529263" transform="rotate(-0 45.004 128.529263)">300</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_15">
+      <path d="M 52.004 97.673684 
+L 453.764 97.673684 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="97.673684" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="102.997684" transform="rotate(-0 45.004 102.997684)">400</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_17">
+      <path d="M 52.004 72.142105 
+L 453.764 72.142105 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="72.142105" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="77.466105" transform="rotate(-0 45.004 77.466105)">500</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_19">
+      <path d="M 52.004 46.610526 
+L 453.764 46.610526 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_20">
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="46.610526" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="51.934526" transform="rotate(-0 45.004 51.934526)">600</text>
+     </g>
+    </g>
+    <g id="ytick_8">
+     <g id="line2d_21">
+      <path d="M 52.004 21.078947 
+L 453.764 21.078947 
+" clip-path="url(#p9107501463)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_22">
+      <g>
+       <use xlink:href="#m640c766d3c" x="52.004" y="21.078947" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="45.004" y="26.402947" transform="rotate(-0 45.004 26.402947)">700</text>
+     </g>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="16.408" y="102.78" transform="rotate(-90 16.408 102.78)">Wildfires</text>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 70.265818 199.8 
+L 93.172628 199.8 
+L 93.172628 101.758737 
+L 70.265818 101.758737 
+z
+" clip-path="url(#p9107501463)" style="fill: #2b4a6b"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 133.895847 199.8 
+L 156.802657 199.8 
+L 156.802657 115.801105 
+L 133.895847 115.801105 
+z
+" clip-path="url(#p9107501463)" style="fill: #2b4a6b"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 197.525875 199.8 
+L 220.432685 199.8 
+L 220.432685 153.587842 
+L 197.525875 153.587842 
+z
+" clip-path="url(#p9107501463)" style="fill: #2b4a6b"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 261.155904 199.8 
+L 284.062714 199.8 
+L 284.062714 149.758105 
+L 261.155904 149.758105 
+z
+" clip-path="url(#p9107501463)" style="fill: #2b4a6b"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 324.785932 199.8 
+L 347.692742 199.8 
+L 347.692742 141.332684 
+L 324.785932 141.332684 
+z
+" clip-path="url(#p9107501463)" style="fill: #2b4a6b"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 388.415961 199.8 
+L 411.322771 199.8 
+L 411.322771 183.459789 
+L 388.415961 183.459789 
+z
+" clip-path="url(#p9107501463)" style="fill: #2b4a6b"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 94.445229 199.8 
+L 117.352039 199.8 
+L 117.352039 94.865211 
+L 94.445229 94.865211 
+z
+" clip-path="url(#p9107501463)" style="fill: #e2692c"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 158.075258 199.8 
+L 180.982068 199.8 
+L 180.982068 123.460579 
+L 158.075258 123.460579 
+z
+" clip-path="url(#p9107501463)" style="fill: #e2692c"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 221.705286 199.8 
+L 244.612096 199.8 
+L 244.612096 133.673211 
+L 221.705286 133.673211 
+z
+" clip-path="url(#p9107501463)" style="fill: #e2692c"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 285.335315 199.8 
+L 308.242125 199.8 
+L 308.242125 105.077842 
+L 285.335315 105.077842 
+z
+" clip-path="url(#p9107501463)" style="fill: #e2692c"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 348.965343 199.8 
+L 371.872153 199.8 
+L 371.872153 27.461842 
+L 348.965343 27.461842 
+z
+" clip-path="url(#p9107501463)" style="fill: #e2692c"/>
+   </g>
+   <g id="patch_14">
+    <path d="M 412.595372 199.8 
+L 435.502182 199.8 
+L 435.502182 128.056263 
+L 412.595372 128.056263 
+z
+" clip-path="url(#p9107501463)" style="fill: #e2692c"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 52.004 199.8 
+L 453.764 199.8 
+" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="105.898634" y="91.801421" transform="rotate(-0 105.898634 91.801421)">411</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="81.719223" y="98.694947" transform="rotate(-0 81.719223 98.694947)">384</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="169.528663" y="120.396789" transform="rotate(-0 169.528663 120.396789)">299</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="145.349252" y="112.737316" transform="rotate(-0 145.349252 112.737316)">329</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="233.158691" y="130.609421" transform="rotate(-0 233.158691 130.609421)">259</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="208.97928" y="150.524053" transform="rotate(-0 208.97928 150.524053)">181</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="296.78872" y="102.014053" transform="rotate(-0 296.78872 102.014053)">371</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="272.609309" y="146.694316" transform="rotate(-0 272.609309 146.694316)">196</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="360.418748" y="24.398053" transform="rotate(-0 360.418748 24.398053)">675</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="336.239337" y="138.268895" transform="rotate(-0 336.239337 138.268895)">229</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="424.048777" y="124.992474" transform="rotate(-0 424.048777 124.992474)">281</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="399.869366" y="180.396" transform="rotate(-0 399.869366 180.396)">64</text>
+   </g>
+   <g id="legend_1">
+    <g id="patch_16">
+     <path d="M 60.554 23.506 
+L 79.554 23.506 
+L 79.554 16.856 
+L 60.554 16.856 
+z
+" style="fill: #2b4a6b"/>
+    </g>
+    <g id="text_28">
+     <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: start; fill: #1d2733" x="87.154" y="23.506" transform="rotate(-0 87.154 23.506)">Forecast, made end of 2022</text>
+    </g>
+    <g id="patch_17">
+     <path d="M 60.554 39.8365 
+L 79.554 39.8365 
+L 79.554 33.1865 
+L 60.554 33.1865 
+z
+" style="fill: #e2692c"/>
+    </g>
+    <g id="text_29">
+     <text style="font-size: 9.5px; font-family: 'Montserrat'; text-anchor: start; fill: #1d2733" x="87.154" y="39.8365" transform="rotate(-0 87.154 39.8365)">Actual 2023 wildfires</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p9107501463">
+   <rect x="52.004" y="5.76" width="401.76" height="194.04"/>
+  </clipPath>
+ </defs>
+</svg>
+</div>
+      </div>
+      <div class="card facts">
+        <h3>Three notable 2023 fires</h3>
+        <p class="note">Distance to the nearest of the 30 bases chosen at the end of 2022, and how many of 20 replays had a drone overhead within 30 minutes.</p>
+        <div class="scroll"><table><thead><tr><th>Fire</th><th>To base</th><th>Reached</th></tr></thead><tbody>
+          <tr><td>McDougall Creek, West Kelowna</td><td>5 km</td><td>20 of 20</td></tr>
+          <tr><td>Bush Creek East, Shuswap</td><td>28 km</td><td>6 of 20</td></tr>
+          <tr><td>Donnie Creek, largest in BC history</td><td>182 km</td><td>0 of 20</td></tr>
+        </tbody></table></div>
+        <p class="note">Bush Creek East started on a day with 55 new fires, so drones were often busy elsewhere. In 2023 the 30 bases had 43% of the season’s fires within 30 minutes, against 30% for even spacing and 54% with perfect hindsight.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Drought, weather and moving bases</h2>
+      <p>To try to fix the 2023 miss, monthly temperature, precipitation, soil moisture and snow depth for 479 points were added from NASA POWER, each as an anomaly from that point’s own 1999 to 2019 normal. Drought known before the season did not predict BC fire seasons. Moving the bases each month helped more than any forecast.</p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Bases re-sited on the 1st of each month</h3>
+        <p class="note">Share of the 6,334 May to September wildfires in 2022 to 2025 within 30 minutes of one of 30 bases.</p>
+        <div class="figure"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="452.241656pt" height="235.721pt" viewBox="0 0 452.241656 235.721" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ 
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 235.721 
+L 452.241656 235.721 
+L 452.241656 -0 
+L 0 -0 
+L 0 235.721 
+z
+" style="fill: none"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 44.721656 199.8 
+L 446.481656 199.8 
+L 446.481656 5.76 
+L 44.721656 5.76 
+L 44.721656 199.8 
+z
+" style="fill: none"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="m9b0b7380d0" d="M 0 0 
+L 0 3.5 
+" style="stroke: #5d6b7a; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m9b0b7380d0" x="93.419838" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(58.534799 215.996)">Fixed network,</text>
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(64.691244 227.5765)">chosen 2021</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#m9b0b7380d0" x="194.874384" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(156.536688 215.996)">Moved monthly,</text>
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(178.790438 227.5765)">history</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#m9b0b7380d0" x="296.328929" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(257.991234 215.996)">Moved monthly,</text>
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(272.730335 227.5765)">+ weather</text>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m9b0b7380d0" x="397.783474" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(380.59367 215.996)">Perfect</text>
+      <text style="font-size: 9.5px; font-family: 'Montserrat'; fill: #5d6b7a" transform="translate(374.849881 227.5765)">hindsight</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_5">
+      <path d="M 44.721656 199.8 
+L 446.481656 199.8 
+" clip-path="url(#p3960aa776c)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <defs>
+       <path id="m041d2109b2" d="M 0 0 
+L -3.5 0 
+" style="stroke: #5d6b7a; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m041d2109b2" x="44.721656" y="199.8" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="37.721656" y="205.124" transform="rotate(-0 37.721656 205.124)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7">
+      <path d="M 44.721656 154.143529 
+L 446.481656 154.143529 
+" clip-path="url(#p3960aa776c)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#m041d2109b2" x="44.721656" y="154.143529" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="37.721656" y="159.467529" transform="rotate(-0 37.721656 159.467529)">20</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9">
+      <path d="M 44.721656 108.487059 
+L 446.481656 108.487059 
+" clip-path="url(#p3960aa776c)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#m041d2109b2" x="44.721656" y="108.487059" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="37.721656" y="113.811059" transform="rotate(-0 37.721656 113.811059)">40</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_11">
+      <path d="M 44.721656 62.830588 
+L 446.481656 62.830588 
+" clip-path="url(#p3960aa776c)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#m041d2109b2" x="44.721656" y="62.830588" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="37.721656" y="68.154588" transform="rotate(-0 37.721656 68.154588)">60</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_13">
+      <path d="M 44.721656 17.174118 
+L 446.481656 17.174118 
+" clip-path="url(#p3960aa776c)" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#m041d2109b2" x="44.721656" y="17.174118" style="fill: #5d6b7a; stroke: #5d6b7a; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: end; fill: #5d6b7a" x="37.721656" y="22.498118" transform="rotate(-0 37.721656 22.498118)">80</text>
+     </g>
+    </g>
+    <g id="text_10">
+     <text style="font-size: 11px; font-family: 'Montserrat'; text-anchor: middle; fill: #5d6b7a" x="16.408" y="102.78" transform="rotate(-90 16.408 102.78)">May to Sep fires within 30 min, %</text>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 62.983474 199.8 
+L 123.856202 199.8 
+L 123.856202 82.919724 
+L 62.983474 82.919724 
+z
+" clip-path="url(#p3960aa776c)" style="fill: #8fb4d8"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 164.43802 199.8 
+L 225.310747 199.8 
+L 225.310747 74.99075 
+L 164.43802 74.99075 
+z
+" clip-path="url(#p3960aa776c)" style="fill: #2b4a6b"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 265.892565 199.8 
+L 326.765293 199.8 
+L 326.765293 72.756221 
+L 265.892565 72.756221 
+z
+" clip-path="url(#p3960aa776c)" style="fill: #e2692c"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 367.347111 199.8 
+L 428.219838 199.8 
+L 428.219838 34.805271 
+L 367.347111 34.805271 
+z
+" clip-path="url(#p3960aa776c)" style="fill: #b8c2cc"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 44.721656 199.8 
+L 446.481656 199.8 
+" style="fill: none; stroke: #dde3ea; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 600; font-size: 10.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="93.419838" y="80.180335" transform="rotate(-0 93.419838 80.180335)">51.2%</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 600; font-size: 10.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="194.874384" y="72.251362" transform="rotate(-0 194.874384 72.251362)">54.7%</text>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 600; font-size: 10.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="296.328929" y="70.016833" transform="rotate(-0 296.328929 70.016833)">55.7%</text>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 600; font-size: 10.5px; font-family: 'Montserrat'; text-anchor: middle; fill: #1d2733" x="397.783474" y="32.065883" transform="rotate(-0 397.783474 32.065883)">72.3%</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p3960aa776c">
+   <rect x="44.721656" y="5.76" width="401.76" height="194.04"/>
+  </clipPath>
+ </defs>
+</svg>
+</div>
+      </div>
+      <div class="card facts">
+        <h3>What the weather data changed</h3>
+        <div class="scroll"><table><thead><tr><th>Test, 2022 to 2025</th><th>Result</th></tr></thead><tbody>
+          <tr><td>Drought known by 1 May, yearly forecast, fires in the top 10% of cells</td><td>47.9% vs 47.4%</td></tr>
+          <tr><td>2023 total, with spring drought data</td><td>Still 46% low</td></tr>
+          <tr><td>Month-ahead regional error, weather added</td><td>51.3% to 47.8%</td></tr>
+          <tr class="hl"><td>Bases moved monthly, May to September coverage</td><td>51.2% to 55.7%</td></tr>
+        </tbody></table></div>
+        <p class="note">Moving monthly beat the fixed network in 15 of 20 months. The weather adjustment added about one point on top of moving, which may be noise. Pre-season drought did not predict BC fire seasons, and summer rain, which nobody knows in May, did.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <h2>Assumptions to argue with</h2>
+      <p>No real product is being modelled. These numbers describe a long-range fixed-wing drone that takes off and lands vertically from a charging dock. Change them in <code>src/config.py</code> and rerun.</p>
+    </div>
+    <div class="card">
+      <dl class="assume" id="assume"></dl>
+      <ul class="caveats">
+        <li>The BC records give a date for each fire, not a time. Report times are drawn from an afternoon-heavy spread.</li>
+        <li>Weather grounding is random here. In reality the storms that start fires also keep drones down, so the replay is optimistic on lightning days.</li>
+        <li>Sites are limited to BC Wildfire Service weather stations and towns. Airspace, terrain, road access and Indigenous land rights are not modelled.</li>
+        <li>Since November 2025, Transport Canada allows flights beyond visual line of sight only in lower-risk conditions: uncontrolled airspace, below 122 m, away from aerodromes, with a Level 1 Complex pilot certificate. Anything else needs a special flight operations certificate. Staffing and cost are not modelled.</li>
+        <li>Fire records include fires that were deliberately monitored rather than fought, so some large fires were large by choice.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Emberwatch</b> is a research project by James Wang, West Point Grey Academy, Vancouver. Thank you to Prof. Jane Z. Wang, UBC; Prof. Jiangchuan Liu, SFU; and Prof. Xiaotao Bi, UBC, for reviewing this work.</p>
+    <p>Data: BC Wildfire Service fire incident locations and historical fire perimeters, BC Wildfire Service weather stations, BC major cities, and biogeoclimatic zones, from the BC Data Catalogue under the Open Government Licence – British Columbia. Roads from the BC Digital Road Atlas. Province outline from Natural Earth.</p>
+    <p id="gen"></p>
+  </footer>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+(() => {
+  const $ = (s) => document.querySelector(s);
+  const tok = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const pct = (v, d = 0) => (v == null || isNaN(v)) ? "–" : (v * 100).toFixed(d) + "%";
+  const K = [5, 10, 15, 20, 25, 30, 40, 50, 60];
+  const D = DATA.meta.drone, R = DATA.meta.radius_km, W = DATA.meta.width_km, H = DATA.meta.height_km;
+  const ZNAMES = { BAFA: "Boreal Altai Fescue Alpine", BG: "Bunchgrass", BWBS: "Boreal White and Black Spruce", CDF: "Coastal Douglas-fir", CMA: "Coastal Mountain-heather Alpine", CWH: "Coastal Western Hemlock", ESSF: "Engelmann Spruce–Subalpine Fir", ICH: "Interior Cedar–Hemlock", IDF: "Interior Douglas-fir", IMA: "Interior Mountain-heather Alpine", MH: "Mountain Hemlock", MS: "Montane Spruce", PP: "Ponderosa Pine", SBPS: "Sub-Boreal Pine–Spruce", SBS: "Sub-Boreal Spruce", SWB: "Spruce–Willow–Birch" };
+
+  // ---------- lookups ----------
+  const res = {};
+  DATA.results.forEach((r) => { (res[r.strategy] ||= {})[r.k] = r; });
+  const simW = DATA.sim.filter((r) => r.scenario === "wildfires only");
+  const sim = (k, m) => simW.find((r) => r.bases === k && r.drones_per_base === m);
+  const cellIdx = new Map(DATA.cells.id.map((id, i) => [id, i]));
+  const outline = new Path2D(DATA.outline);
+  const hhmm = (t) => { t = Math.max(0, Math.min(1439, Math.round(t))); return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0"); };
+
+  // ---------- repo link ----------
+  (() => {
+    const h = location.hostname, seg = location.pathname.split("/").filter(Boolean);
+    if (h.endsWith(".github.io")) {
+      const a = $("#repo-link");
+      a.href = `https://github.com/${h.split(".")[0]}/${seg[0] || ""}`;
+      a.hidden = false;
+    }
+  })();
+
+  // ---------- header findings ----------
+  const k30 = res.model[30], a30 = res.area[30], h30 = res.hist[30];
+  const s301 = sim(30, 1), s302 = sim(30, 2);
+  $("#findings").innerHTML = [
+    [pct(k30.covered_share), `of 2022–25 wildfires would have been within 30 minutes of one of 30 bases placed by the optimizer. Spreading the same 30 bases evenly reaches ${pct(a30.covered_share)}.`],
+    [pct(s301.within_target), `is what the replay delivers once queues and weather are counted, with one drone per base. A second drone at each base lifts it to ${pct(s302.within_target)}.`],
+    [`${Math.abs((k30.covered_share - h30.covered_share) * 100).toFixed(1)} pts`, `separate the network chosen with the machine-learning risk map from the one chosen with plain 22-year history. The model ranks cells better, but once each base covers 45 km, plain history is enough to pick sites.`],
+  ].map(([n, t]) => `<div class="finding"><span class="num">${n}</span><p>${t}</p></div>`).join("");
+  $("#gen").textContent = `Generated ${DATA.meta.generated}. ${DATA.meta.n_test_fires.toLocaleString()} wildfires in the 2022–25 test seasons, ${DATA.meta.n_test_large.toLocaleString()} of them past ${DATA.meta.large_ha} ha.`;
+
+  // ---------- state ----------
+  const st = { mode: "plan", strategy: "model", large: false, ki: 5, risk: true, fires: true, rings: true, m: "1", t: 1080, playing: false };
+
+  // ---------- canvas ----------
+  const canvas = $("#map"), box = $("#canvas-box"), tip = $("#tip");
+  const ctx = canvas.getContext("2d");
+  let scale = 1, pal = {};
+  function readPalette() {
+    ["--land", "--outline", "--accent", "--fire-dot", "--panel", "--bg", "--ink", "--ink-3", "--good", "--warning", "--serious", "--critical", "--grounded"].forEach((n) => pal[n] = tok(n));
+    pal.ramp = [0, 1, 2, 3, 4, 5, 6].map((i) => tok("--r" + i));
+  }
+  const BREAKS = { all: [0.01, 0.03, 0.06, 0.12, 0.25, 0.5, 1.0], large: [0.002, 0.005, 0.01, 0.02, 0.04, 0.08, 0.16] };
+  function bin(v, br) { let b = -1; for (let i = 0; i < br.length; i++) if (v >= br[i]) b = i; return b; }
+  function stratKey() { return (st.large && ["model", "hist", "oracle"].includes(st.strategy)) ? st.strategy + "_large" : st.strategy; }
+  function bases() { return (DATA.placements[stratKey()][String(K[st.ki])] || []).map((i) => DATA.cand[i]); }
+
+  function resize() {
+    const w = box.clientWidth, h = box.clientHeight, dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    scale = w / W;
+    ctx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
+    draw();
+  }
+  const px = (n) => n / scale; // css pixels -> map km
+
+  function drawBase(b, ringAlpha) {
+    if (st.rings) {
+      ctx.beginPath(); ctx.arc(b.u, b.v, R, 0, Math.PI * 2);
+      ctx.globalAlpha = ringAlpha; ctx.fillStyle = pal["--accent"]; ctx.fill();
+      ctx.globalAlpha = 0.9; ctx.lineWidth = px(1); ctx.strokeStyle = pal["--accent"]; ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+  }
+  function drawBaseMarker(b) {
+    ctx.beginPath(); ctx.arc(b.u, b.v, px(5), 0, Math.PI * 2);
+    ctx.fillStyle = pal["--accent"]; ctx.fill(); ctx.lineWidth = px(2); ctx.strokeStyle = pal["--panel"]; ctx.stroke();
+  }
+
+  function draw() {
+    if (!pal.ramp) readPalette();
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = pal["--bg"]; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = pal["--land"]; ctx.fill(outline, "evenodd");
+    if (st.mode === "plan") drawPlan(); else drawReplay();
+    ctx.lineWidth = px(1); ctx.strokeStyle = pal["--outline"]; ctx.stroke(outline);
+    if (st.mode === "plan") bases().forEach(drawBaseMarker); else DATA.replay.bases.forEach((i) => drawBaseMarker(DATA.cand[i]));
+  }
+
+  function drawPlan() {
+    if (st.risk) {
+      const vals = st.large ? DATA.cells.rl : DATA.cells.rm, br = st.large ? BREAKS.large : BREAKS.all;
+      ctx.save(); ctx.clip(outline, "evenodd");
+      for (let i = 0; i < vals.length; i++) {
+        const b = bin(vals[i], br); if (b < 0) continue;
+        const id = DATA.cells.id[i], row = Math.floor(id / DATA.meta.nx), col = id % DATA.meta.nx;
+        ctx.fillStyle = pal.ramp[b]; ctx.fillRect(col * 10, row * 10, 10.4, 10.4);
+      }
+      ctx.restore();
+    }
+    const bs = bases();
+    bs.forEach((b) => drawBase(b, 0.1));
+    if (st.fires) {
+      ctx.fillStyle = pal["--fire-dot"];
+      const f = DATA.fires, s = px(2.2);
+      for (let i = 0; i < f.u.length; i++) {
+        if (st.large && !f.L[i]) continue;
+        ctx.fillRect(f.u[i] - s / 2, f.v[i] - s / 2, s, s);
+      }
+    }
+  }
+
+  // ---------- replay ----------
+  function callState(c, t) {
+    if (c.t > t) return null;
+    if (c.s === "out of range") return "range";
+    if (c.s === "grounded by weather") return "grounded";
+    if (c.s === "drones busy") return "busy";
+    const dep = c.t + c.w, arr = c.t + c.fe;
+    if (t < dep) return "waiting";
+    if (t < arr) return "flying";
+    return c.fe <= D.target_min ? "ok" : "late";
+  }
+  const STATES = [
+    ["ok", "Drone overhead within 30 min", "--good", "disc"],
+    ["late", "Drone overhead, but later", "--warning", "square"],
+    ["flying", "Drone on the way", "--accent", "ring"],
+    ["waiting", "Waiting for a free drone", "--serious", "ring"],
+    ["busy", "No drone free within 3 hours", "--serious", "hsquare"],
+    ["range", "No base within 60 km", "--critical", "cross"],
+    ["grounded", "Weather keeps drones down", "--grounded", "dash"],
+  ];
+  const STYLE = Object.fromEntries(STATES.map(([k, , c, s]) => [k, { c, s }]));
+  function shape(g, kind, x, y, r, color, lw) {
+    g.strokeStyle = color; g.fillStyle = color; g.lineWidth = lw; g.beginPath();
+    if (kind === "disc") { g.arc(x, y, r, 0, Math.PI * 2); g.fill(); }
+    else if (kind === "ring") { g.arc(x, y, r * 0.9, 0, Math.PI * 2); g.stroke(); }
+    else if (kind === "square") { g.fillRect(x - r, y - r, 2 * r, 2 * r); }
+    else if (kind === "hsquare") { g.strokeRect(x - r * 0.85, y - r * 0.85, 1.7 * r, 1.7 * r); }
+    else if (kind === "cross") { g.moveTo(x - r, y - r); g.lineTo(x + r, y + r); g.moveTo(x + r, y - r); g.lineTo(x - r, y + r); g.stroke(); }
+    else if (kind === "dash") { g.fillRect(x - r, y - r * 0.35, 2 * r, r * 0.7); }
+  }
+  function drawReplay() {
+    DATA.replay.bases.forEach((i) => drawBase(DATA.cand[i], 0.06));
+    const calls = DATA.replay.runs[st.m], t = st.t;
+    calls.forEach((c) => {
+      const s = callState(c, t); if (s !== "flying") return;
+      const b = DATA.cand[c.b], dep = c.t + c.w + D.launch_min, arr = c.t + c.fe;
+      const f = Math.max(0, Math.min(1, (t - dep) / Math.max(1, arr - dep)));
+      ctx.lineWidth = px(1.5); ctx.strokeStyle = pal["--accent"]; ctx.globalAlpha = 0.7;
+      ctx.beginPath(); ctx.moveTo(b.u, b.v); ctx.lineTo(c.u, c.v); ctx.stroke(); ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.arc(b.u + (c.u - b.u) * f, b.v + (c.v - b.v) * f, px(3), 0, Math.PI * 2); ctx.fillStyle = pal["--ink"]; ctx.fill();
+    });
+    calls.forEach((c) => {
+      const s = callState(c, t); if (!s) return;
+      const sty = STYLE[s];
+      shape(ctx, sty.s, c.u, c.v, px(4.5), pal[sty.c], px(1.8));
+    });
+  }
+  function updateCounts() {
+    const calls = DATA.replay.runs[st.m], n = {};
+    let reported = 0;
+    calls.forEach((c) => { const s = callState(c, st.t); if (!s) return; reported++; n[s] = (n[s] || 0) + 1; });
+    const icon = (k) => { const sty = STYLE[k]; return `<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" data-k="${k}"></svg>`; };
+    $("#counts").innerHTML = `<div><span></span><span>New fires reported so far</span><span class="val">${reported} of ${calls.length}</span></div>` +
+      STATES.map(([k, label]) => `<div>${icon(k)}<span>${label}</span><span class="val">${n[k] || 0}</span></div>`).join("");
+    $("#counts").querySelectorAll("svg").forEach((svg) => {
+      const k = svg.dataset.k, c = document.createElement("canvas"); c.width = 28; c.height = 28;
+      const g = c.getContext("2d"); g.scale(2, 2); shape(g, STYLE[k].s, 7, 7, 4.5, tok(STYLE[k].c), 1.8);
+      svg.outerHTML = `<img src="${c.toDataURL()}" width="14" height="14" alt="">`;
+    });
+    $("#clock").textContent = hhmm(st.t);
+  }
+
+  // ---------- legend + panel ----------
+  function legend() {
+    if (st.mode === "plan") {
+      const br = st.large ? BREAKS.large : BREAKS.all;
+      const ramp = pal.ramp.map((c) => `<i style="background:${c}"></i>`).join("");
+      $("#legend").innerHTML =
+        (st.risk ? `<span class="item">${st.large ? "Expected fires past 10 ha" : "Expected wildfires"} per 10 km cell per year <span class="mono" style="font-family:var(--mono)">${br[0]}</span><span class="ramp">${ramp}</span><span style="font-family:var(--mono)">${br[br.length - 1]}+</span></span>` : "") +
+        (st.fires ? `<span class="item"><span class="sw" style="width:5px;height:5px;background:var(--fire-dot)"></span>${st.large ? "Fire past 10 ha" : "Wildfire"}, 2022–25</span>` : "") +
+        `<span class="item"><span class="sw" style="border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--panel)"></span>Drone base</span>` +
+        (st.rings ? `<span class="item"><span class="sw" style="border-radius:50%;border:1px solid var(--accent)"></span>${Math.round(R)} km: 30 minutes of flight</span>` : "");
+    } else {
+      $("#legend").innerHTML = `<span class="item"><span class="sw" style="border-radius:50%;background:var(--accent);box-shadow:0 0 0 2px var(--panel)"></span>Drone base, ${DATA.replay.bases.length}-base network</span><span class="item"><span class="sw" style="width:8px;height:8px;border-radius:50%;background:var(--ink)"></span>Drone in flight</span><span class="item">Fire symbols are explained in the panel</span>`;
+    }
+  }
+  function panel() {
+    const k = K[st.ki];
+    $("#k-val").textContent = k;
+    const r = res[stratKey()][k], area = res.area[k];
+    $("#st-cov").textContent = pct(r.covered_share);
+    $("#st-cov-sub").textContent = st.strategy === "area" ? `of ${DATA.meta.n_test_fires.toLocaleString()} wildfires in 2022–25. This is the no-risk-data baseline.` : `of ${DATA.meta.n_test_fires.toLocaleString()} wildfires in 2022–25. Spreading ${k} bases evenly reaches ${pct(area.covered_share)}.`;
+    $("#st-large").textContent = pct(r.covered_share_large);
+    $("#st-dist").textContent = Math.round(r.median_distance_km) + " km";
+    $("#w-large").disabled = !["model", "hist", "oracle"].includes(st.strategy);
+    $("#w-all").setAttribute("aria-pressed", String(!st.large)); $("#w-large").setAttribute("aria-pressed", String(st.large));
+    $("#map-caption").textContent = st.mode === "plan" ? `${k} bases · ${$("#strategy").selectedOptions[0].text.toLowerCase()}` : `${DATA.replay.date} · ${DATA.replay.bases.length} bases`;
+  }
+  function replayPanel() {
+    const n = DATA.replay.runs[st.m].length, d = new Date(DATA.replay.date + "T12:00:00");
+    const nice = d.toLocaleDateString("en-CA", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+    $("#rp-title").textContent = nice;
+    $("#rp-note").textContent = `${n} new wildfires started in BC this day, almost all from lightning, the most of any day in 2022–25. The network is the ${DATA.replay.bases.length}-base plan chosen with the risk model.`;
+    $("#m1").setAttribute("aria-pressed", String(st.m === "1")); $("#m2").setAttribute("aria-pressed", String(st.m === "2"));
+    $("#map-caption").textContent = `${DATA.replay.date} · ${DATA.replay.bases.length} bases · ${st.m === "1" ? "one drone" : "two drones"} each`;
+    updateCounts();
+  }
+  function refresh() {
+    $("#plan-controls").hidden = st.mode !== "plan";
+    $("#replay-controls").hidden = st.mode !== "replay";
+    $("#mode-plan").setAttribute("aria-pressed", String(st.mode === "plan"));
+    $("#mode-replay").setAttribute("aria-pressed", String(st.mode === "replay"));
+    if (st.mode === "plan") panel(); else replayPanel();
+    legend(); draw();
+  }
+
+  // ---------- tooltip ----------
+  function showTip(x, y, html) {
+    tip.innerHTML = html; tip.hidden = false;
+    const bw = box.clientWidth, tw = tip.offsetWidth, th = tip.offsetHeight;
+    tip.style.left = Math.min(bw - tw - 4, x + 14) + "px";
+    tip.style.top = Math.max(4, y - th - 10) + "px";
+  }
+  const fireCountCache = new Map();
+  function firesNear(b) {
+    const key = b.u + "," + b.v; if (fireCountCache.has(key)) return fireCountCache.get(key);
+    const f = DATA.fires; let n = 0, nl = 0;
+    for (let i = 0; i < f.u.length; i++) { const dx = f.u[i] - b.u, dy = f.v[i] - b.v; if (dx * dx + dy * dy <= R * R) { n++; nl += f.L[i]; } }
+    const out = [n, nl]; fireCountCache.set(key, out); return out;
+  }
+  canvas.addEventListener("mousemove", (e) => {
+    const r = canvas.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, u = x / scale, v = y / scale;
+    const near = (list) => { let best = null, bd = px(10) ** 2; list.forEach((p) => { const d = (p.u - u) ** 2 + (p.v - v) ** 2; if (d < bd) { bd = d; best = p; } }); return best; };
+    if (st.mode === "plan") {
+      const b = near(bases());
+      if (b) { const [n, nl] = firesNear(b); return showTip(x, y, `<b>${b.n}</b><br><span class="mono">${b.k === "station" ? "BCWS weather station" : "Town"}</span><br>${n.toLocaleString()} wildfires within ${Math.round(R)} km in 2022–25, ${nl} of them past 10 ha`); }
+      const id = Math.floor(v / 10) * DATA.meta.nx + Math.floor(u / 10), i = cellIdx.get(id);
+      if (i == null || !ctx.isPointInPath(outline, x * (canvas.width / r.width), y * (canvas.height / r.height), "evenodd")) { tip.hidden = true; return; }
+      const z = DATA.zones[DATA.cells.z[i]];
+      return showTip(x, y, `<b>${DATA.cells.rm[i].toFixed(2)}</b> expected wildfires a year in this 10 km cell<br><span class="mono">history ${DATA.cells.rh[i].toFixed(2)} / yr · past 10 ha ${DATA.cells.rl[i].toFixed(3)} / yr</span><br>${ZNAMES[z] || z} zone`);
+    }
+    const c = near(DATA.replay.runs[st.m].filter((c) => c.t <= st.t));
+    if (!c) { tip.hidden = true; return; }
+    const cause = { L: "Lightning", P: "Person", U: "Unknown cause" }[c.c] || c.c;
+    const label = STATES.find(([k]) => k === callState(c, st.t))[1];
+    let extra = c.fe != null ? `<br>Drone overhead after ${Math.round(c.fe)} min${c.w > 1 ? `, of which ${Math.round(c.w)} min waiting` : ""}` : "";
+    showTip(x, y, `<b>${cause} fire</b>, reported ${hhmm(c.t)}<br>${label}${extra}`);
+  });
+  canvas.addEventListener("mouseleave", () => tip.hidden = true);
+
+  // ---------- controls ----------
+  $("#mode-plan").onclick = () => { st.mode = "plan"; stop(); refresh(); };
+  $("#mode-replay").onclick = () => { st.mode = "replay"; refresh(); };
+  $("#strategy").onchange = (e) => { st.strategy = e.target.value; if (!["model", "hist", "oracle"].includes(st.strategy)) st.large = st.large; refresh(); };
+  $("#w-all").onclick = () => { st.large = false; refresh(); };
+  $("#w-large").onclick = () => { st.large = true; refresh(); };
+  $("#k").oninput = (e) => { st.ki = +e.target.value; refresh(); };
+  $("#show-risk").onchange = (e) => { st.risk = e.target.checked; refresh(); };
+  $("#show-fires").onchange = (e) => { st.fires = e.target.checked; refresh(); };
+  $("#show-rings").onchange = (e) => { st.rings = e.target.checked; refresh(); };
+  $("#m1").onclick = () => { st.m = "1"; refresh(); };
+  $("#m2").onclick = () => { st.m = "2"; refresh(); };
+  $("#time").oninput = (e) => { st.t = +e.target.value; updateCounts(); draw(); };
+  let timer = null;
+  function stop() { if (timer) clearInterval(timer); timer = null; $("#play").textContent = "Play the day"; }
+  $("#play").onclick = () => {
+    if (timer) return stop();
+    if (st.t >= 1435) st.t = 0;
+    $("#play").textContent = "Pause";
+    timer = setInterval(() => { st.t = Math.min(1439, st.t + 6); $("#time").value = st.t; updateCounts(); draw(); if (st.t >= 1439) stop(); }, 60);
+  };
+
+  // ---------- charts ----------
+  function lineChart(el, keysEl, { xs, series, yMax, xTitle, fmt, tipTitle }) {
+    keysEl.innerHTML = series.map((s) => `<span><i style="background:${tok(s.color)}"></i>${s.label}</span>`).join("");
+    const w = el.clientWidth || 600, h = Math.max(220, Math.min(320, w * 0.5)), m = { l: 40, r: 14, t: 10, b: 34 };
+    const xmin = Math.min(...xs), xmax = Math.max(...xs);
+    const X = (x) => m.l + (x - xmin) / (xmax - xmin) * (w - m.l - m.r), Y = (y) => h - m.b - y / yMax * (h - m.t - m.b);
+    const ticks = []; for (let y = 0; y <= yMax + 1e-9; y += 0.2) ticks.push(y);
+    let svg = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img">`;
+    ticks.forEach((y) => { svg += `<line x1="${m.l}" x2="${w - m.r}" y1="${Y(y)}" y2="${Y(y)}" stroke="${tok("--rule-2")}" stroke-width="1"/><text x="${m.l - 8}" y="${Y(y) + 4}" text-anchor="end">${Math.round(y * 100)}%</text>`; });
+    xs.forEach((x) => { svg += `<text x="${X(x)}" y="${h - m.b + 18}" text-anchor="middle">${x}</text>`; });
+    svg += `<text x="${w - m.r}" y="${h - 2}" text-anchor="end">${xTitle}</text>`;
+    series.forEach((s) => {
+      const pts = xs.map((x, i) => [X(x), Y(s.values[i])]);
+      svg += `<polyline fill="none" stroke="${tok(s.color)}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${pts.map((p) => p.join(",")).join(" ")}"/>`;
+      const [lx, ly] = pts[pts.length - 1];
+      svg += `<circle cx="${lx}" cy="${ly}" r="4" fill="${tok(s.color)}" stroke="${tok("--panel")}" stroke-width="2"/>`;
+    });
+    svg += `<line class="xh" x1="0" x2="0" y1="${m.t}" y2="${h - m.b}" stroke="${tok("--ink-3")}" stroke-width="1" visibility="hidden"/>`;
+    svg += `<rect x="${m.l}" y="0" width="${w - m.l - m.r}" height="${h}" fill="transparent" class="hit"/></svg>`;
+    el.innerHTML = svg + `<div class="tip" hidden></div>`;
+    const t = el.querySelector(".tip"), xh = el.querySelector(".xh");
+    el.querySelector(".hit").addEventListener("mousemove", (e) => {
+      const r = el.getBoundingClientRect(), mx = e.clientX - r.left;
+      let bi = 0; xs.forEach((x, i) => { if (Math.abs(X(x) - mx) < Math.abs(X(xs[bi]) - mx)) bi = i; });
+      xh.setAttribute("x1", X(xs[bi])); xh.setAttribute("x2", X(xs[bi])); xh.setAttribute("visibility", "visible");
+      const rows = series.map((s) => [s, s.values[bi]]).sort((a, b) => b[1] - a[1]);
+      t.innerHTML = `<b>${tipTitle(xs[bi])}</b><br>` + rows.map(([s, v]) => `<span style="display:inline-block;width:10px;height:2px;background:${tok(s.color)};vertical-align:middle;margin-right:6px"></span>${s.label} <span class="mono">${fmt(v)}</span>`).join("<br>");
+      t.hidden = false;
+      const tw = t.offsetWidth; t.style.left = Math.min(w - tw, Math.max(0, X(xs[bi]) + 12 - (X(xs[bi]) + 12 + tw > w ? tw + 24 : 0))) + "px"; t.style.top = "8px";
+    });
+    el.querySelector(".hit").addEventListener("mouseleave", () => { t.hidden = true; xh.setAttribute("visibility", "hidden"); });
+  }
+
+  let c1large = false;
+  function chart1() {
+    const L = c1large, get = (s) => K.map((k) => res[s][k][L ? "covered_share_large" : "covered_share"]);
+    const series = [
+      { label: L ? "Risk model, large-fire version" : "Risk model", color: "--s1", values: get(L ? "model_large" : "model") },
+      { label: L ? "History, large fires only" : "22-year history", color: "--s2", values: get(L ? "hist_large" : "hist") },
+      { label: "Spread evenly", color: "--s3", values: get("area") },
+      { label: "Random weather stations", color: "--s4", values: get("random") },
+      { label: "Biggest towns", color: "--s5", values: get("towns") },
+      { label: "Hindsight, not possible in practice", color: "--ceiling", values: get(L ? "oracle_large" : "oracle") },
+    ];
+    $("#c1-sub").textContent = L ? `Share of the ${DATA.meta.n_test_large.toLocaleString()} fires that grew past 10 ha in 2022–25 that were within 30 minutes of a base. The first two lines are optimized for large fires.` : `Share of the ${DATA.meta.n_test_fires.toLocaleString()} wildfires in 2022–25 that were within 30 minutes of a base.`;
+    lineChart($("#c1"), $("#c1-keys"), { xs: K, series, yMax: 0.8, xTitle: "number of bases", fmt: (v) => pct(v, 1), tipTitle: (k) => `${k} bases` });
+    $("#c1-table").innerHTML = `<table><thead><tr><th>Strategy</th>${K.map((k) => `<th>${k}</th>`).join("")}</tr></thead><tbody>${series.map((s) => `<tr><td>${s.label}</td>${s.values.map((v) => `<td>${pct(v, 1)}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+    $("#c1-all").setAttribute("aria-pressed", String(!L)); $("#c1-large").setAttribute("aria-pressed", String(L));
+  }
+  $("#c1-all").onclick = () => { c1large = false; chart1(); };
+  $("#c1-large").onclick = () => { c1large = true; chart1(); };
+
+  function chart2() {
+    const ks = [20, 30, 40, 60];
+    const series = [
+      { label: "Distance only, what the map promises", color: "--ceiling", values: ks.map((k) => sim(k, 1).static_coverage) },
+      { label: "Replay, one drone per base", color: "--s1", values: ks.map((k) => sim(k, 1).within_target) },
+      { label: "Two drones per base", color: "--s2", values: ks.map((k) => sim(k, 2).within_target) },
+      { label: "Three drones per base", color: "--s3", values: ks.map((k) => sim(k, 3).within_target) },
+    ];
+    lineChart($("#c2"), $("#c2-keys"), { xs: ks, series, yMax: 0.8, xTitle: "number of bases", fmt: (v) => pct(v, 1), tipTitle: (k) => `${k} bases` });
+  }
+  function chart3() {
+    const n = sim(30, 1).busiest_day_calls, d = new Date(DATA.replay.date + "T12:00:00").toLocaleDateString("en-CA", { day: "numeric", month: "long", year: "numeric" });
+    $("#c3-sub").textContent = `On ${d}, ${n} new wildfires started. Share with a drone overhead within 30 minutes:`;
+    const rows = [[30, 1], [30, 2], [30, 3], [60, 1], [60, 2], [60, 3]].map(([k, m]) => [k, m, sim(k, m).busiest_day_within_target, sim(k, m).within_target]);
+    const max = 0.8;
+    $("#c3").innerHTML = rows.map(([k, m, v]) => `<div class="bar"><span>${k} bases × ${m} drone${m > 1 ? "s" : ""}</span><div class="track"><div class="fill" style="width:${v / max * 85}%"></div><span class="v">${pct(v)}</span></div></div>`).join("");
+    const a = sim(60, 1), b = sim(30, 2);
+    $("#c3-note").textContent = `Both 60 × 1 and 30 × 2 use 60 drones. Over whole seasons, 60 sites reach ${pct(a.within_target)} against ${pct(b.within_target)}. On the worst day they are close: ${pct(a.busiest_day_within_target)} for 60 sites and ${pct(b.busiest_day_within_target)} for 30 sites with two drones each. Capacity is set by a few lightning days: across a season each drone flies about ${Math.round(sim(30, 1).flight_hours_per_drone_per_season)} hours.`;
+  }
+
+  const FNAMES = { c_mean_all: "Average fires a year, all years so far", c_mean10_blur1: "Recent fires, smoothed over neighbouring cells", c_mean10_blur3: "Recent fires, smoothed over 30 km", road_frac: "Road density in the cell", road_frac_50km: "Road density within 50 km", burned_last5_blur3: "Area burned nearby in the last 5 years", dist_town_km: "Distance to the nearest town", light_mean10_blur3: "Recent lightning fires nearby", light_mean10_blur1: "Recent lightning fires, adjacent cells", person_mean10: "Recent human-caused fires", north_km: "North–south position", east_km: "East–west position", c_lag1: "Fires last season", c_mean3: "Fires, last 3 seasons", c_mean5: "Fires, last 5 seasons", c_mean10: "Fires, last 10 seasons", large_mean_all: "Past fires that grew past 10 ha", large_mean_all_blur2: "Past large fires nearby", yrs_since_fire: "Years since the cell last burned", log_town_pop: "Size of the nearest town", land_frac: "Share of the cell that is land" };
+  function importance() {
+    const rows = DATA.risk.importance.slice(0, 8), max = rows[0].share;
+    $("#imp").innerHTML = rows.map((r) => `<div class="bar"><span>${FNAMES[r.feature] || r.feature}</span><div class="track"><div class="fill" style="width:${r.share / max * 80}%"></div><span class="v">${pct(r.share)}</span></div></div>`).join("");
+  }
+  function riskTable() {
+    const names = { history: "Past average", history_smoothed: "Past average, smoothed", model: "Risk model" };
+    const block = (title, m) => {
+      const cols = ["capture_top10", "capture_top20", "auc_any_fire"];
+      const best = Object.fromEntries(cols.map((c) => [c, Math.max(...Object.values(m).map((r) => r[c]))]));
+      return `<tr><td colspan="4" style="padding-top:14px"><span class="label">${title}</span></td></tr>` + Object.entries(m).map(([k, r]) => `<tr><td>${names[k] || k}</td>${cols.map((c) => `<td class="${r[c] === best[c] ? "best" : ""}">${c === "auc_any_fire" ? r[c].toFixed(3) : pct(r[c])}</td>`).join("")}</tr>`).join("");
+    };
+    $("#risk-table").innerHTML = `<table><thead><tr><th></th><th>Top 10% of cells</th><th>Top 20%</th><th>AUC</th></tr></thead><tbody>${block("All wildfires", DATA.risk.all)}${block("Fires past 10 ha", DATA.risk.large)}</tbody></table>`;
+  }
+  function assumptions() {
+    const items = [["Cruise speed", `${D.cruise_kmh} km/h`], ["Launch and climb", `${D.launch_min} min`], ["Target", `${D.target_min} min`], ["30-minute reach", `${Math.round(R)} km`], ["Longest mission", `${D.max_radius_km} km out`], ["Time over the fire", `${D.observe_min} min`], ["Recharge after landing", `${D.recharge_min} min`], ["Calls grounded by weather", "15%"]];
+    $("#assume").innerHTML = items.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  }
+
+  function renderCharts() { chart1(); chart2(); chart3(); }
+  function all() { pal = {}; readPalette(); refresh(); renderCharts(); }
+
+  $("#k").value = st.ki;
+  importance(); riskTable(); assumptions();
+  readPalette(); refresh(); resize(); renderCharts();
+  new ResizeObserver(() => { resize(); }).observe(box);
+  let rw = 0; new ResizeObserver((e) => { const w = Math.round(e[0].contentRect.width); if (w !== rw) { rw = w; renderCharts(); } }).observe($("#c1"));
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", all);
+  new MutationObserver(all).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+</script>

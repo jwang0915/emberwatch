@@ -1,0 +1,490 @@
+{
+  "versions": {
+    "base": {
+      "params": {
+        "num_leaves": 63,
+        "min_data_in_leaf": 50,
+        "lambda_l2": 0.0
+      },
+      "rounds": 394,
+      "n_features": 42,
+      "per_year": {
+        "2022": {
+          "predicted_total": 1154.2270698930872,
+          "actual_total": 1803,
+          "total_error_pct": -35.98296894658418,
+          "poisson_deviance": 0.5383595403869342,
+          "capture_top10": 0.5163615942001343,
+          "centre_error_pct": 39.3274050369114,
+          "by_centre": {
+            "Cariboo": [
+              134,
+              227
+            ],
+            "Coastal": [
+              167,
+              300
+            ],
+            "Kamloops": [
+              283,
+              489
+            ],
+            "Northwest": [
+              54,
+              116
+            ],
+            "Prince George": [
+              217,
+              242
+            ],
+            "Southeast": [
+              238,
+              429
+            ]
+          }
+        },
+        "2023": {
+          "predicted_total": 1239.6670708576376,
+          "actual_total": 2295,
+          "total_error_pct": -45.98400562711819,
+          "poisson_deviance": 0.6674576137233792,
+          "capture_top10": 0.40653595328330994,
+          "centre_error_pct": 48.66987004317783,
+          "by_centre": {
+            "Cariboo": [
+              170,
+              259
+            ],
+            "Coastal": [
+              179,
+              371
+            ],
+            "Kamloops": [
+              290,
+              411
+            ],
+            "Northwest": [
+              59,
+              281
+            ],
+            "Prince George": [
+              228,
+              674
+            ],
+            "Southeast": [
+              252,
+              299
+            ]
+          }
+        },
+        "2024": {
+          "predicted_total": 1223.8803408949527,
+          "actual_total": 1697,
+          "total_error_pct": -27.879767772837205,
+          "poisson_deviance": 0.5137775608066942,
+          "capture_top10": 0.4861520230770111,
+          "centre_error_pct": 34.534646811163796,
+          "by_centre": {
+            "Cariboo": [
+              171,
+              230
+            ],
+            "Coastal": [
+              183,
+              159
+            ],
+            "Kamloops": [
+              274,
+              420
+            ],
+            "Northwest": [
+              71,
+              85
+            ],
+            "Prince George": [
+              209,
+              429
+            ],
+            "Southeast": [
+              251,
+              374
+            ]
+          }
+        },
+        "2025": {
+          "predicted_total": 1194.567886226574,
+          "actual_total": 1396,
+          "total_error_pct": -14.429234510990396,
+          "poisson_deviance": 0.41376377429713607,
+          "capture_top10": 0.5128939747810364,
+          "centre_error_pct": 20.705882073125768,
+          "by_centre": {
+            "Cariboo": [
+              166,
+              235
+            ],
+            "Coastal": [
+              183,
+              232
+            ],
+            "Kamloops": [
+              269,
+              284
+            ],
+            "Northwest": [
+              67,
+              62
+            ],
+            "Prince George": [
+              200,
+              344
+            ],
+            "Southeast": [
+              246,
+              239
+            ]
+          }
+        }
+      },
+      "pooled": {
+        "poisson_deviance": 0.5333396223035359,
+        "capture_top10": 0.47392573952674866
+      }
+    },
+    "winter": {
+      "params": {
+        "num_leaves": 15,
+        "min_data_in_leaf": 200,
+        "lambda_l2": 5.0
+      },
+      "rounds": 563,
+      "n_features": 50,
+      "per_year": {
+        "2022": {
+          "predicted_total": 1043.5697204899843,
+          "actual_total": 1803,
+          "total_error_pct": -42.12037046644569,
+          "poisson_deviance": 0.5491131334463626,
+          "capture_top10": 0.5235718488693237,
+          "centre_error_pct": 45.25632787165837,
+          "by_centre": {
+            "Cariboo": [
+              121,
+              227
+            ],
+            "Coastal": [
+              153,
+              300
+            ],
+            "Kamloops": [
+              245,
+              489
+            ],
+            "Northwest": [
+              54,
+              116
+            ],
+            "Prince George": [
+              199,
+              242
+            ],
+            "Southeast": [
+              214,
+              429
+            ]
+          }
+        },
+        "2023": {
+          "predicted_total": 937.8200341318543,
+          "actual_total": 2295,
+          "total_error_pct": -59.13638195503903,
+          "poisson_deviance": 0.716546602341916,
+          "capture_top10": 0.4135076105594635,
+          "centre_error_pct": 61.844011211264935,
+          "by_centre": {
+            "Cariboo": [
+              120,
+              259
+            ],
+            "Coastal": [
+              139,
+              371
+            ],
+            "Kamloops": [
+              198,
+              411
+            ],
+            "Northwest": [
+              56,
+              281
+            ],
+            "Prince George": [
+              188,
+              674
+            ],
+            "Southeast": [
+              175,
+              299
+            ]
+          }
+        },
+        "2024": {
+          "predicted_total": 847.1484166574317,
+          "actual_total": 1697,
+          "total_error_pct": -50.07964545330397,
+          "poisson_deviance": 0.5690650830100344,
+          "capture_top10": 0.4814378321170807,
+          "centre_error_pct": 53.510999365575536,
+          "by_centre": {
+            "Cariboo": [
+              104,
+              230
+            ],
+            "Coastal": [
+              135,
+              159
+            ],
+            "Kamloops": [
+              180,
+              420
+            ],
+            "Northwest": [
+              57,
+              85
+            ],
+            "Prince George": [
+              152,
+              429
+            ],
+            "Southeast": [
+              163,
+              374
+            ]
+          }
+        },
+        "2025": {
+          "predicted_total": 1429.467850965578,
+          "actual_total": 1396,
+          "total_error_pct": 2.397410527620192,
+          "poisson_deviance": 0.4092699374415709,
+          "capture_top10": 0.5207736492156982,
+          "centre_error_pct": 16.504632624971435,
+          "by_centre": {
+            "Cariboo": [
+              181,
+              235
+            ],
+            "Coastal": [
+              208,
+              232
+            ],
+            "Kamloops": [
+              301,
+              284
+            ],
+            "Northwest": [
+              93,
+              62
+            ],
+            "Prince George": [
+              281,
+              344
+            ],
+            "Southeast": [
+              281,
+              239
+            ]
+          }
+        }
+      },
+      "pooled": {
+        "poisson_deviance": 0.5609986890599711,
+        "capture_top10": 0.453205406665802
+      }
+    },
+    "spring": {
+      "params": {
+        "num_leaves": 15,
+        "min_data_in_leaf": 50,
+        "lambda_l2": 0.0
+      },
+      "rounds": 604,
+      "n_features": 62,
+      "per_year": {
+        "2022": {
+          "predicted_total": 1463.0112709522105,
+          "actual_total": 1803,
+          "total_error_pct": -18.8568346670987,
+          "poisson_deviance": 0.5087755858162445,
+          "capture_top10": 0.5440931916236877,
+          "centre_error_pct": 27.728755861322117,
+          "by_centre": {
+            "Cariboo": [
+              184,
+              227
+            ],
+            "Coastal": [
+              180,
+              300
+            ],
+            "Kamloops": [
+              358,
+              489
+            ],
+            "Northwest": [
+              81,
+              116
+            ],
+            "Prince George": [
+              282,
+              242
+            ],
+            "Southeast": [
+              297,
+              429
+            ]
+          }
+        },
+        "2023": {
+          "predicted_total": 1248.2472133829415,
+          "actual_total": 2295,
+          "total_error_pct": -45.61014320771497,
+          "poisson_deviance": 0.636549999276011,
+          "capture_top10": 0.42222222685813904,
+          "centre_error_pct": 48.90087974851559,
+          "by_centre": {
+            "Cariboo": [
+              159,
+              259
+            ],
+            "Coastal": [
+              173,
+              371
+            ],
+            "Kamloops": [
+              253,
+              411
+            ],
+            "Northwest": [
+              87,
+              281
+            ],
+            "Prince George": [
+              283,
+              674
+            ],
+            "Southeast": [
+              219,
+              299
+            ]
+          }
+        },
+        "2024": {
+          "predicted_total": 899.3122549609541,
+          "actual_total": 1697,
+          "total_error_pct": -47.005759872660335,
+          "poisson_deviance": 0.5623633557415445,
+          "capture_top10": 0.47142013907432556,
+          "centre_error_pct": 50.822994822530404,
+          "by_centre": {
+            "Cariboo": [
+              117,
+              230
+            ],
+            "Coastal": [
+              136,
+              159
+            ],
+            "Kamloops": [
+              179,
+              420
+            ],
+            "Northwest": [
+              65,
+              85
+            ],
+            "Prince George": [
+              184,
+              429
+            ],
+            "Southeast": [
+              153,
+              374
+            ]
+          }
+        },
+        "2025": {
+          "predicted_total": 891.1400616055228,
+          "actual_total": 1396,
+          "total_error_pct": -36.16475203398834,
+          "poisson_deviance": 0.43391722506912783,
+          "capture_top10": 0.5186246633529663,
+          "centre_error_pct": 40.07495757242362,
+          "by_centre": {
+            "Cariboo": [
+              100,
+              235
+            ],
+            "Coastal": [
+              135,
+              232
+            ],
+            "Kamloops": [
+              213,
+              284
+            ],
+            "Northwest": [
+              55,
+              62
+            ],
+            "Prince George": [
+              146,
+              344
+            ],
+            "Southeast": [
+              188,
+              239
+            ]
+          }
+        }
+      },
+      "pooled": {
+        "poisson_deviance": 0.5354015414757319,
+        "capture_top10": 0.4787929356098175
+      },
+      "drought_share_of_gain": 0.13459682122578337
+    }
+  },
+  "test_years": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "movable": {
+    "2022": {
+      "fixed_2021_plan": 0.5945646145313367,
+      "moved_each_spring_base": 0.5945646145313367,
+      "moved_each_spring_spring": 0.5879090404880755,
+      "hindsight": 0.6583471991125901
+    },
+    "2023": {
+      "fixed_2021_plan": 0.44294425087108014,
+      "moved_each_spring_base": 0.44686411149825783,
+      "moved_each_spring_spring": 0.46994773519163763,
+      "hindsight": 0.5383275261324042
+    },
+    "2024": {
+      "fixed_2021_plan": 0.5350618738951091,
+      "moved_each_spring_base": 0.5321154979375369,
+      "moved_each_spring_spring": 0.5073659398939304,
+      "hindsight": 0.63347083087802
+    },
+    "2025": {
+      "fixed_2021_plan": 0.5709169054441261,
+      "moved_each_spring_base": 0.5544412607449857,
+      "moved_each_spring_spring": 0.5587392550143266,
+      "hindsight": 0.6160458452722063
+    }
+  }
+}
